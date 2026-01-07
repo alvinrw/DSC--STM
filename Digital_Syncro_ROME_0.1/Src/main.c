@@ -109,6 +109,7 @@ int main(void)
   
   // Inisialisasi buffer untuk UART
   MY_UART1.text_index = 0;
+  MY_UART1.CS = 0;  // Init flag
   memset(MY_UART1.text_buffer, 0, sizeof(MY_UART1.text_buffer));
   
   // Inisialisasi nilai
@@ -121,22 +122,23 @@ int main(void)
   HAL_Delay(100);
   
   SSD1306_GotoXY(10,0);
-  SSD1306_Puts("Digital Syncro", &Font_7x10, 1);
+  sprintf(txt, "Device: #%d", DEVICE_ID);
+  SSD1306_Puts(txt, &Font_7x10, 1);
   SSD1306_UpdateScreen();
   HAL_Delay(50);
   
-  SSD1306_GotoXY(10,10);
+  SSD1306_GotoXY(10,15);
   SSD1306_Puts("Digital: 0   ", &Font_7x10, 1);
   SSD1306_UpdateScreen();
   HAL_Delay(50);
   
-  SSD1306_GotoXY(10,30);
+  SSD1306_GotoXY(10,35);
   SSD1306_Puts("Syncro: 0.00  ", &Font_7x10, 1);
   SSD1306_UpdateScreen();
   HAL_Delay(50);
   
-  SSD1306_GotoXY(5,50);
-  SSD1306_Puts("Send via Serial", &Font_7x10, 1);
+  SSD1306_GotoXY(5,55);
+  SSD1306_Puts("Waiting...", &Font_7x10, 1);
   SSD1306_UpdateScreen();
   HAL_Delay(50);
   
@@ -144,7 +146,7 @@ int main(void)
   dsc(0);
   
   // Kirim pesan awal via UART
-  sprintf(txt, "STM32 Ready - Send 0-360\\r\\n");
+  sprintf(txt, "Device #%d Ready\r\n", DEVICE_ID);
   HAL_UART_Transmit(&huart1, (uint8_t*)txt, strlen(txt), 100);
   
   /* USER CODE END 2 */
@@ -156,8 +158,8 @@ int main(void)
 	  // Polling UART - Terima 1 byte
 	  uint8_t received_char;
 	  if(HAL_UART_Receive(&huart1, &received_char, 1, 100) == HAL_OK){
-		  // Jika terima angka (0-9), simpan ke buffer
-		  if(received_char >= '0' && received_char <= '9'){
+		  // Simpan karakter ke buffer
+		  if(received_char >= ' ' && received_char <= '~'){  // Printable ASCII
 			  if(MY_UART1.text_index < 19){
 				  MY_UART1.text_buffer[MY_UART1.text_index] = received_char;
 				  MY_UART1.text_index++;
@@ -169,34 +171,98 @@ int main(void)
 				  // Null-terminate
 				  MY_UART1.text_buffer[MY_UART1.text_index] = '\0';
 				  
-				  // Konversi ke integer
-				  int value = atoi(MY_UART1.text_buffer);
-				  
-				  // Validasi range
-				  if(value < 0) value = 0;
-				  if(value > 360) value = 360;
-				  
-				  // Update nilai
-				  digital_val = (uint16_t)value;
-				  syncro_val = (float)value;
-				  
-				  // Update OLED
-				  SSD1306_GotoXY(10,10);
-				  sprintf(txt, "Digital: %d   ", digital_val);
-				  SSD1306_Puts(txt, &Font_7x10, 1);
-				  
-				  SSD1306_GotoXY(10,30);
-				  sprintf(txt, "Syncro: %.2f  ", syncro_val);
-				  SSD1306_Puts(txt, &Font_7x10, 1);
-				  
-				  SSD1306_UpdateScreen();
-				  
-				  // Output ke GPIO
-				  dsc(syncro_val);
-				  
-				  // Kirim konfirmasi balik ke Python
-				  sprintf(txt, "OK: Digital=%d, Syncro=%.2f\r\n", digital_val, syncro_val);
-				  HAL_UART_Transmit(&huart1, (uint8_t*)txt, strlen(txt), 100);
+				  // Cek apakah ini device-specific command (#1, #2, dll)
+				  if(MY_UART1.text_buffer[0] == '#'){
+					  // Parse device ID dari command
+					  int target_device = atoi(&MY_UART1.text_buffer[1]);
+					  
+					  // Cek apakah command untuk device ini
+					  if(target_device == DEVICE_ID){
+						  // Set flag: next value adalah untuk device ini
+						  MY_UART1.CS = 1;  // Gunakan CS sebagai flag
+					  }
+				  }
+				  // Jika sebelumnya ada command untuk device ini
+				  else if(MY_UART1.CS == 1){
+					  // Parse value
+					  int value = atoi(MY_UART1.text_buffer);
+					  
+					  // Validasi range
+					  if(value < 0) value = 0;
+					  if(value > 360) value = 360;
+					  
+					  // Update nilai
+					  digital_val = (uint16_t)value;
+					  syncro_val = (float)value;
+					  
+					  // Update OLED
+					  SSD1306_GotoXY(10,10);
+					  sprintf(txt, "Digital: %d   ", digital_val);
+					  SSD1306_Puts(txt, &Font_7x10, 1);
+					  
+					  SSD1306_GotoXY(10,30);
+					  sprintf(txt, "Syncro: %.2f  ", syncro_val);
+					  SSD1306_Puts(txt, &Font_7x10, 1);
+					  
+					  SSD1306_UpdateScreen();
+					  
+					  // Output ke GPIO
+					  dsc(syncro_val);
+					  
+					  // Kirim konfirmasi
+					  sprintf(txt, "Dev#%d OK: %d\\r\\n", DEVICE_ID, digital_val);
+					  HAL_UART_Transmit(&huart1, (uint8_t*)txt, strlen(txt), 100);
+					  
+					  // Reset flag
+					  MY_UART1.CS = 0;
+				  }
+				  // Broadcast initialization (space-separated values)
+				  else if(strchr(MY_UART1.text_buffer, ' ') != NULL){
+					  // Copy buffer karena strtok akan memodifikasi
+					  char temp_buffer[20];
+					  strcpy(temp_buffer, MY_UART1.text_buffer);
+					  
+					  // Parse space-separated values
+					  char *token = strtok(temp_buffer, " ");
+					  int device_index = 1;
+					  
+					  while(token != NULL && device_index <= 5){
+						  if(device_index == DEVICE_ID){
+							  // This value is for this device
+							  int value = atoi(token);
+							  
+							  // Validasi range
+							  if(value < 0) value = 0;
+							  if(value > 360) value = 360;
+							  
+							  // Update nilai
+							  digital_val = (uint16_t)value;
+							  syncro_val = (float)value;
+							  
+							  // Update OLED
+							  SSD1306_GotoXY(10,15);
+							  sprintf(txt, "Digital: %d   ", digital_val);
+							  SSD1306_Puts(txt, &Font_7x10, 1);
+							  
+							  SSD1306_GotoXY(10,35);
+							  sprintf(txt, "Syncro: %.2f  ", syncro_val);
+							  SSD1306_Puts(txt, &Font_7x10, 1);
+							  
+							  SSD1306_UpdateScreen();
+							  
+							  // Output ke GPIO
+							  dsc(syncro_val);
+							  
+							  // Kirim konfirmasi
+							  sprintf(txt, "Dev#%d Init: %d\r\n", DEVICE_ID, digital_val);
+							  HAL_UART_Transmit(&huart1, (uint8_t*)txt, strlen(txt), 100);
+							  
+							  break;
+						  }
+						  token = strtok(NULL, " ");
+						  device_index++;
+					  }
+				  }
 				  
 				  // Reset buffer
 				  MY_UART1.text_index = 0;

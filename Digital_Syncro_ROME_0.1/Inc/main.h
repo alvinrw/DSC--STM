@@ -40,6 +40,13 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+
+// ============================================
+// DEVICE ID CONFIGURATION
+// Change this for each STM32 device (1-5)
+// ============================================
+#define DEVICE_ID 2  // Device 1, 2, 3, 4, or 5
+
 #define len_uart1	20  // Buffer untuk ASCII text input
 /* USER CODE END ET */
 
