@@ -1,0 +1,238 @@
+﻿Folder PATH listing for volume Windows-SSD
+Volume serial number is 6A4B-C83B
+C:\USERS\ALVIN\DOCUMENTS\COOLYEAH\PKL\TUGAS\SYNCHRO_ROME\TUGAS\DIGITAL_SYNCRO_ROME_0.1\DIGITAL_SYNCRO_ROME_0.1
+|   .cproject
+|   .cproject_org
+|   .mxproject
+|   .project
+|   .project_org
+|   Digital_Syncro_ROME Run.cfg
+|   Digital_Syncro_ROME.ioc
+|   Digital_Syncro_ROME.launch
+|   Digital_Syncro_ROME.xml
+|   Digital_Syncro_ROME_converter.log
+|   Format_uart.xlsx
+|   STM32F103C8Tx_FLASH.ld
+|   
++---.settings
+|       com.st.stm32cube.ide.mcu.sfrview.prefs
+|       language.settings.xml
+|       
++---Debug
+|   |   .gitignore
+|   |   Digital_Syncro_ROME.elf
+|   |   Digital_Syncro_ROME.hex
+|   |   Digital_Syncro_ROME.list
+|   |   Digital_Syncro_ROME.map
+|   |   makefile
+|   |   objects.list
+|   |   objects.mk
+|   |   sources.mk
+|   |   
+|   +---Drivers
+|   |   \---STM32F1xx_HAL_Driver
+|   |       \---Src
+|   |               stm32f1xx_hal.cyclo
+|   |               stm32f1xx_hal.d
+|   |               stm32f1xx_hal.o
+|   |               stm32f1xx_hal.su
+|   |               stm32f1xx_hal_cortex.cyclo
+|   |               stm32f1xx_hal_cortex.d
+|   |               stm32f1xx_hal_cortex.o
+|   |               stm32f1xx_hal_cortex.su
+|   |               stm32f1xx_hal_dma.cyclo
+|   |               stm32f1xx_hal_dma.d
+|   |               stm32f1xx_hal_dma.o
+|   |               stm32f1xx_hal_dma.su
+|   |               stm32f1xx_hal_exti.cyclo
+|   |               stm32f1xx_hal_exti.d
+|   |               stm32f1xx_hal_exti.o
+|   |               stm32f1xx_hal_exti.su
+|   |               stm32f1xx_hal_flash.cyclo
+|   |               stm32f1xx_hal_flash.d
+|   |               stm32f1xx_hal_flash.o
+|   |               stm32f1xx_hal_flash.su
+|   |               stm32f1xx_hal_flash_ex.cyclo
+|   |               stm32f1xx_hal_flash_ex.d
+|   |               stm32f1xx_hal_flash_ex.o
+|   |               stm32f1xx_hal_flash_ex.su
+|   |               stm32f1xx_hal_gpio.cyclo
+|   |               stm32f1xx_hal_gpio.d
+|   |               stm32f1xx_hal_gpio.o
+|   |               stm32f1xx_hal_gpio.su
+|   |               stm32f1xx_hal_gpio_ex.cyclo
+|   |               stm32f1xx_hal_gpio_ex.d
+|   |               stm32f1xx_hal_gpio_ex.o
+|   |               stm32f1xx_hal_gpio_ex.su
+|   |               stm32f1xx_hal_i2c.cyclo
+|   |               stm32f1xx_hal_i2c.d
+|   |               stm32f1xx_hal_i2c.o
+|   |               stm32f1xx_hal_i2c.su
+|   |               stm32f1xx_hal_pwr.cyclo
+|   |               stm32f1xx_hal_pwr.d
+|   |               stm32f1xx_hal_pwr.o
+|   |               stm32f1xx_hal_pwr.su
+|   |               stm32f1xx_hal_rcc.cyclo
+|   |               stm32f1xx_hal_rcc.d
+|   |               stm32f1xx_hal_rcc.o
+|   |               stm32f1xx_hal_rcc.su
+|   |               stm32f1xx_hal_rcc_ex.cyclo
+|   |               stm32f1xx_hal_rcc_ex.d
+|   |               stm32f1xx_hal_rcc_ex.o
+|   |               stm32f1xx_hal_rcc_ex.su
+|   |               stm32f1xx_hal_tim.cyclo
+|   |               stm32f1xx_hal_tim.d
+|   |               stm32f1xx_hal_tim.o
+|   |               stm32f1xx_hal_tim.su
+|   |               stm32f1xx_hal_tim_ex.cyclo
+|   |               stm32f1xx_hal_tim_ex.d
+|   |               stm32f1xx_hal_tim_ex.o
+|   |               stm32f1xx_hal_tim_ex.su
+|   |               stm32f1xx_hal_uart.cyclo
+|   |               stm32f1xx_hal_uart.d
+|   |               stm32f1xx_hal_uart.o
+|   |               stm32f1xx_hal_uart.su
+|   |               subdir.mk
+|   |               
+|   +---Src
+|   |       dsc_rome_16b.cyclo
+|   |       dsc_rome_16b.d
+|   |       dsc_rome_16b.o
+|   |       dsc_rome_16b.su
+|   |       fonts.cyclo
+|   |       fonts.d
+|   |       fonts.o
+|   |       fonts.su
+|   |       main.cyclo
+|   |       main.d
+|   |       main.o
+|   |       main.su
+|   |       ssd1306.cyclo
+|   |       ssd1306.d
+|   |       ssd1306.o
+|   |       ssd1306.su
+|   |       stm32f1xx_hal_msp.cyclo
+|   |       stm32f1xx_hal_msp.d
+|   |       stm32f1xx_hal_msp.o
+|   |       stm32f1xx_hal_msp.su
+|   |       stm32f1xx_it.cyclo
+|   |       stm32f1xx_it.d
+|   |       stm32f1xx_it.o
+|   |       stm32f1xx_it.su
+|   |       subdir.mk
+|   |       syscalls.cyclo
+|   |       syscalls.d
+|   |       syscalls.o
+|   |       syscalls.su
+|   |       system_stm32f1xx.cyclo
+|   |       system_stm32f1xx.d
+|   |       system_stm32f1xx.o
+|   |       system_stm32f1xx.su
+|   |       
+|   \---startup
+|           startup_stm32f103xb.d
+|           startup_stm32f103xb.o
+|           subdir.mk
+|           
++---Drivers
+|   +---CMSIS
+|   |   |   LICENSE.txt
+|   |   |   
+|   |   +---Device
+|   |   |   \---ST
+|   |   |       \---STM32F1xx
+|   |   |           |   LICENSE.txt
+|   |   |           |   
+|   |   |           +---Include
+|   |   |           |       stm32f103xb.h
+|   |   |           |       stm32f1xx.h
+|   |   |           |       system_stm32f1xx.h
+|   |   |           |       
+|   |   |           \---Source
+|   |   |               \---Templates
+|   |   \---Include
+|   |           cmsis_armcc.h
+|   |           cmsis_armclang.h
+|   |           cmsis_compiler.h
+|   |           cmsis_gcc.h
+|   |           cmsis_iccarm.h
+|   |           cmsis_version.h
+|   |           core_armv8mbl.h
+|   |           core_armv8mml.h
+|   |           core_cm0.h
+|   |           core_cm0plus.h
+|   |           core_cm1.h
+|   |           core_cm23.h
+|   |           core_cm3.h
+|   |           core_cm33.h
+|   |           core_cm4.h
+|   |           core_cm7.h
+|   |           core_sc000.h
+|   |           core_sc300.h
+|   |           mpu_armv7.h
+|   |           mpu_armv8.h
+|   |           tz_context.h
+|   |           
+|   \---STM32F1xx_HAL_Driver
+|       |   LICENSE.txt
+|       |   
+|       +---Inc
+|       |   |   stm32f1xx_hal.h
+|       |   |   stm32f1xx_hal_cortex.h
+|       |   |   stm32f1xx_hal_def.h
+|       |   |   stm32f1xx_hal_dma.h
+|       |   |   stm32f1xx_hal_dma_ex.h
+|       |   |   stm32f1xx_hal_exti.h
+|       |   |   stm32f1xx_hal_flash.h
+|       |   |   stm32f1xx_hal_flash_ex.h
+|       |   |   stm32f1xx_hal_gpio.h
+|       |   |   stm32f1xx_hal_gpio_ex.h
+|       |   |   stm32f1xx_hal_i2c.h
+|       |   |   stm32f1xx_hal_pwr.h
+|       |   |   stm32f1xx_hal_rcc.h
+|       |   |   stm32f1xx_hal_rcc_ex.h
+|       |   |   stm32f1xx_hal_tim.h
+|       |   |   stm32f1xx_hal_tim_ex.h
+|       |   |   stm32f1xx_hal_uart.h
+|       |   |   
+|       |   \---Legacy
+|       |           stm32_hal_legacy.h
+|       |           
+|       \---Src
+|               stm32f1xx_hal.c
+|               stm32f1xx_hal_cortex.c
+|               stm32f1xx_hal_dma.c
+|               stm32f1xx_hal_exti.c
+|               stm32f1xx_hal_flash.c
+|               stm32f1xx_hal_flash_ex.c
+|               stm32f1xx_hal_gpio.c
+|               stm32f1xx_hal_gpio_ex.c
+|               stm32f1xx_hal_i2c.c
+|               stm32f1xx_hal_pwr.c
+|               stm32f1xx_hal_rcc.c
+|               stm32f1xx_hal_rcc_ex.c
+|               stm32f1xx_hal_tim.c
+|               stm32f1xx_hal_tim_ex.c
+|               stm32f1xx_hal_uart.c
+|               
++---Inc
+|       dsc_rome_16b.h
+|       fonts.h
+|       main.h
+|       ssd1306.h
+|       stm32f1xx_hal_conf.h
+|       stm32f1xx_it.h
+|       
++---Src
+|       dsc_rome_16b.c
+|       fonts.c
+|       main.c
+|       ssd1306.c
+|       stm32f1xx_hal_msp.c
+|       stm32f1xx_it.c
+|       syscalls.c
+|       system_stm32f1xx.c
+|       
+\---startup
+        startup_stm32f103xb.s
+        
