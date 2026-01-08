@@ -6,18 +6,20 @@ PORT = 'COM11'  # Sesuaikan dengan port kamu
 BAUD = 115200
 
 def send_broadcast(ser, hex_values):
-    """Kirim broadcast initialization untuk semua device (10 HEX bytes)"""
-    # Format: "0x89 0x99 0x12 0x34 0xAB 0xCD 0x00 0xFF 0x80 0x00"
-    # 10 bytes total (2 bytes per device)
+    """Kirim broadcast initialization untuk semua device (15 HEX bytes total)"""
+    # Format 15 bytes:
+    # - Byte 1-2: Header (0xA5 0x99) - WAJIB!
+    # - Byte 3-5: Reserved (0x00 0x00 0x00)
+    # - Byte 6-15: Device data (10 bytes, 2 per device)
     
-    if len(hex_values) != 10:
-        print("❌ Error: Harus 10 byte HEX!")
+    if len(hex_values) != 15:
+        print("❌ Error: Harus 15 byte HEX!")
         return
     
     # Kirim sebagai string HEX
     data = " ".join(hex_values) + "\n"
     ser.write(data.encode())
-    print(f"✓ Broadcast sent: {data.strip()}")
+    print(f"✓ Broadcast sent (15 bytes): {data.strip()}")
     time.sleep(0.3)
     
     # Baca response dari semua device
@@ -100,24 +102,24 @@ try:
     print("\n" + "="*50)
     print("  INISIALISASI AWAL - BROADCAST (HEX)")
     print("="*50)
-    print("Masukkan 10 byte HEX untuk 5 devices (2 byte per device)")
-    print("Format: 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH")
-    print("Contoh: 0x00 0x00 0x40 0x00 0x80 0x00 0xC0 0x00 0xFF 0xFF")
-    print("        └─────┘ └─────┘ └─────┘ └─────┘ └─────┘")
-    print("         Dev1    Dev2    Dev3    Dev4    Dev5")
+    print("Masukkan 15 byte HEX (Header + Reserved + Device Data)")
+    print("Format: 0xA5 0x99 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH")
+    print("Contoh: 0xA5 0x99 0x00 0x00 0x00 0x00 0x00 0x40 0x00 0x80 0x00 0xC0 0x00 0xFF 0xFF")
+    print("        └─────────┘ └───────────┘ └─────┘ └─────┘ └─────┘ └─────┘ └─────┘")
+    print("          Header      Reserved    Dev1    Dev2    Dev3    Dev4    Dev5")
     print("="*50)
     
     while True:
         try:
-            input_str = input("\nInput 10 byte HEX: ").strip()
+            input_str = input("\nInput 15 byte HEX: ").strip()
             hex_values, error = parse_hex_input(input_str)
             
             if error:
                 print(f"❌ Error: {error}")
                 continue
             
-            if len(hex_values) != 10:
-                print(f"❌ Error: Harus 10 byte! (kamu input {len(hex_values)} byte)")
+            if len(hex_values) != 15:
+                print(f"❌ Error: Harus 15 byte! (kamu input {len(hex_values)} byte)")
                 continue
             
             # Kirim broadcast
@@ -141,17 +143,18 @@ try:
         elif choice == '0':
             # Broadcast ulang
             print("\n--- Broadcast (Set All Devices) ---")
-            print("Format: 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH")
+            print("Format: 0xA5 0x99 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH")
+            print("Contoh: 0xA5 0x99 0x00 0x00 0x00 0x00 0x00 0x40 0x00 0x80 0x00 0xC0 0x00 0xFF 0xFF")
             try:
-                input_str = input("Input 10 byte HEX: ").strip()
+                input_str = input("Input 15 byte HEX: ").strip()
                 hex_values, error = parse_hex_input(input_str)
                 
                 if error:
                     print(f"❌ Error: {error}")
                     continue
                 
-                if len(hex_values) != 10:
-                    print(f"❌ Error: Harus 10 byte!")
+                if len(hex_values) != 15:
+                    print(f"❌ Error: Harus 15 byte!")
                     continue
                 
                 send_broadcast(ser, hex_values)
