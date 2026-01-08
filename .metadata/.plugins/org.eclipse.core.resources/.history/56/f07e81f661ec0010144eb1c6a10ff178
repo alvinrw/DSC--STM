@@ -64,6 +64,7 @@ int main(void)
   
   // Inisialisasi buffer untuk UART
   MY_UART1.text_index = 0;
+  MY_UART1.CS = 0;
   memset(MY_UART1.text_buffer, 0, sizeof(MY_UART1.text_buffer));
   
   // Inisialisasi nilai
@@ -99,9 +100,6 @@ int main(void)
   // Init GPIO output
   dsc(0);
   
-  // LED ON by default (idle state)
-  HAL_GPIO_WritePin(LED_BLINK_GPIO_Port, LED_BLINK_Pin, GPIO_PIN_SET);
-  
   // Kirim pesan awal via UART
   sprintf(txt, "Device #%d Ready\r\n", DEVICE_ID);
   HAL_UART_Transmit(&huart1, (uint8_t*)txt, strlen(txt), 100);
@@ -127,8 +125,62 @@ int main(void)
           // Null-terminate
           MY_UART1.text_buffer[MY_UART1.text_index] = '\0';
 
+          // Cek apakah ini device-specific command (#1, #2, dll)
+          if(MY_UART1.text_buffer[0] == '#'){
+            // Parse device ID dari command
+            int target_device = atoi(&MY_UART1.text_buffer[1]);
+
+            // Cek apakah command untuk device ini
+            if(target_device == DEVICE_ID){
+              // Set flag: next value adalah untuk device ini
+              MY_UART1.CS = 1;
+            }
+          }
+          // Jika sebelumnya ada command untuk device ini
+          else if(MY_UART1.CS == 1){
+            // Parse 2 HEX bytes: "0x80 0x00"
+            char temp_buffer[60];
+            strcpy(temp_buffer, MY_UART1.text_buffer);
+
+            char *token1 = strtok(temp_buffer, " ");
+            char *token2 = strtok(NULL, " ");
+
+            if(token1 != NULL && token2 != NULL){
+              // Convert HEX to int
+              uint8_t byte_high = (uint8_t)strtol(token1, NULL, 16);
+              uint8_t byte_low = (uint8_t)strtol(token2, NULL, 16);
+
+              // Combine to 16-bit
+              digital_val = (uint16_t)((byte_high << 8) | byte_low);
+
+              // Convert to degrees
+              syncro_val = (float)digital_val * 360.0f / 65535.0f;
+
+              // Update OLED
+              SSD1306_GotoXY(10,15);
+              sprintf(txt, "Digital: %u   ", digital_val);
+              SSD1306_Puts(txt, &Font_7x10, 1);
+
+              SSD1306_GotoXY(10,35);
+              sprintf(txt, "Syncro: %.2f  ", syncro_val);
+              SSD1306_Puts(txt, &Font_7x10, 1);
+
+              SSD1306_UpdateScreen();
+
+              // Output ke GPIO
+              dsc(syncro_val);
+
+              // Kirim konfirmasi
+              sprintf(txt, "Dev#%d OK: %u (%.2f deg)\r\n", DEVICE_ID, digital_val, syncro_val);
+              HAL_UART_Transmit(&huart1, (uint8_t*)txt, strlen(txt), 100);
+            }
+
+            // Reset flag
+            MY_UART1.CS = 0;
+          }
           // Broadcast initialization (15 HEX bytes with header validation)
-          if(strchr(MY_UART1.text_buffer, ' ') != NULL){
+          // CS == 0 dan ada spasi berarti ini broadcast
+          else if(MY_UART1.CS == 0 && strchr(MY_UART1.text_buffer, ' ') != NULL){
             // Parse 15 HEX bytes
             char temp_buffer[90];
             strcpy(temp_buffer, MY_UART1.text_buffer);
@@ -182,11 +234,6 @@ int main(void)
 
                     dsc(syncro_val);
 
-                    // Blink LED (broadcast received)
-                    HAL_GPIO_WritePin(LED_BLINK_GPIO_Port, LED_BLINK_Pin, GPIO_PIN_RESET);
-                    HAL_Delay(100);
-                    HAL_GPIO_WritePin(LED_BLINK_GPIO_Port, LED_BLINK_Pin, GPIO_PIN_SET);
-
                     sprintf(txt, "Dev#%d Init: %u (%.2f deg)\r\n", DEVICE_ID, digital_val, syncro_val);
                     HAL_UART_Transmit(&huart1, (uint8_t*)txt, strlen(txt), 100);
 
@@ -205,8 +252,12 @@ int main(void)
       }
     }
 
-    // LED stays ON (no heartbeat blink)
-    // LED will blink only when broadcast data is received
+    // Blink LED (heartbeat)
+    static uint32_t last_blink = 0;
+    if(HAL_GetTick() - last_blink > 500){
+      HAL_GPIO_TogglePin(LED_BLINK_GPIO_Port, LED_BLINK_Pin);
+      last_blink = HAL_GetTick();
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -346,7 +397,30 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+  if(huart->Instance == USART1){
+    for(uint8_t i = 0; i < len_uart1; i++){
+      if(MY_UART1.UART_RX[i] == '\n' || MY_UART1.UART_RX[i] == '\r'){
+        MY_UART1.UART_RX[i] = '\0';
 
+        int value = atoi((char*)MY_UART1.UART_RX);
+
+        if(value < 0) value = 0;
+        if(value > 360) value = 360;
+
+        digital_val = (uint16_t)value;
+        syncro_val = (float)value;
+
+//        HAL_GPIO_WritePin(EN_SYNC_GPIO_Port, EN_SYNC_Pin, SET);
+
+        memset(MY_UART1.UART_RX, 0, len_uart1);
+        HAL_UART_Receive_DMA(&huart1, MY_UART1.UART_RX, len_uart1);
+
+        break;
+      }
+    }
+  }
+}
 /* USER CODE END 4 */
 
 /**
