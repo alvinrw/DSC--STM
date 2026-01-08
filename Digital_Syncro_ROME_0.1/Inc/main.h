@@ -45,7 +45,7 @@ extern "C" {
 // DEVICE ID CONFIGURATION
 // Change this for each STM32 device (1-5)
 // ============================================
-#define DEVICE_ID 2  // Device 1, 2, 3, 4, or 5
+#define DEVICE_ID 1  // Device 1, 2, 3, 4, or 5
 
 #define len_uart1	20  // Buffer untuk ASCII text input
 /* USER CODE END ET */
@@ -61,7 +61,7 @@ struct UART_RX{
 	uint8_t UART_RX[len_uart1];
 	uint8_t CS;
 	float buffer_sync;
-	char text_buffer[20];  // Buffer untuk ASCII text
+	char text_buffer[60];  // Buffer untuk ASCII text (broadcast needs ~53 chars)
 	uint8_t text_index;
 };
 typedef struct UART_RX MY_UART;

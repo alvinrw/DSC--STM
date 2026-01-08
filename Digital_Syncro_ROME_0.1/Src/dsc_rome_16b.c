@@ -18,69 +18,69 @@ void dsc(float degree){
 
   //bit 2
   if(digital&0x0004){
-    HAL_GPIO_WritePin(B1_GPIO_Port, B3_Pin, SET);
+    HAL_GPIO_WritePin(B3_GPIO_Port, B3_Pin, SET);
   }
-  else HAL_GPIO_WritePin(B1_GPIO_Port, B3_Pin, RESET);
+  else HAL_GPIO_WritePin(B3_GPIO_Port, B3_Pin, RESET);
 
   //bit 3
   if(digital&0x0008){
-    HAL_GPIO_WritePin(B1_GPIO_Port, B4_Pin, SET);
+    HAL_GPIO_WritePin(B4_GPIO_Port, B4_Pin, SET);
   }
-  else HAL_GPIO_WritePin(B1_GPIO_Port, B4_Pin, RESET);
+  else HAL_GPIO_WritePin(B4_GPIO_Port, B4_Pin, RESET);
 
   //bit 4
-  if(digital&0x00010){
-    HAL_GPIO_WritePin(B1_GPIO_Port, B5_Pin, SET);
+  if(digital&0x0010){
+    HAL_GPIO_WritePin(B5_GPIO_Port, B5_Pin, SET);
   }
-  else HAL_GPIO_WritePin(B1_GPIO_Port, B5_Pin, RESET);
+  else HAL_GPIO_WritePin(B5_GPIO_Port, B5_Pin, RESET);
 
   //bit 5
   if(digital&0x0020){
-    HAL_GPIO_WritePin(B1_GPIO_Port, B6_Pin, SET);
+    HAL_GPIO_WritePin(B6_GPIO_Port, B6_Pin, SET);
   }
-  else HAL_GPIO_WritePin(B1_GPIO_Port, B6_Pin, RESET);
+  else HAL_GPIO_WritePin(B6_GPIO_Port, B6_Pin, RESET);
 
   //bit 6
   if(digital&0x0040){
-    HAL_GPIO_WritePin(B1_GPIO_Port, B7_Pin, SET);
+    HAL_GPIO_WritePin(B7_GPIO_Port, B7_Pin, SET);
   }
-  else HAL_GPIO_WritePin(B1_GPIO_Port, B7_Pin, RESET);
+  else HAL_GPIO_WritePin(B7_GPIO_Port, B7_Pin, RESET);
 
   //bit 7
   if(digital&0x0080){
-    HAL_GPIO_WritePin(B1_GPIO_Port, B8_Pin, SET);
+    HAL_GPIO_WritePin(B8_GPIO_Port, B8_Pin, SET);
   }
-  else HAL_GPIO_WritePin(B1_GPIO_Port, B8_Pin, RESET);
+  else HAL_GPIO_WritePin(B8_GPIO_Port, B8_Pin, RESET);
 
   //bit 8
   if(digital&0x0100){
-    HAL_GPIO_WritePin(B1_GPIO_Port, B9_Pin, SET);
+    HAL_GPIO_WritePin(B9_GPIO_Port, B9_Pin, SET);
   }
-  else HAL_GPIO_WritePin(B1_GPIO_Port, B9_Pin, RESET);
+  else HAL_GPIO_WritePin(B9_GPIO_Port, B9_Pin, RESET);
 
   //bit 9
   if(digital&0x0200){
-    HAL_GPIO_WritePin(B1_GPIO_Port, B10_Pin, SET);
+    HAL_GPIO_WritePin(B10_GPIO_Port, B10_Pin, SET);
   }
-  else HAL_GPIO_WritePin(B1_GPIO_Port, B10_Pin, RESET);
+  else HAL_GPIO_WritePin(B10_GPIO_Port, B10_Pin, RESET);
 
   //bit 10
   if(digital&0x0400){
-    HAL_GPIO_WritePin(B1_GPIO_Port, B11_Pin, SET);
+    HAL_GPIO_WritePin(B11_GPIO_Port, B11_Pin, SET);
   }
-  else HAL_GPIO_WritePin(B1_GPIO_Port, B11_Pin, RESET);
+  else HAL_GPIO_WritePin(B11_GPIO_Port, B11_Pin, RESET);
 
   //bit 11
   if(digital&0x0800){
-    HAL_GPIO_WritePin(B1_GPIO_Port, B12_Pin, SET);
+    HAL_GPIO_WritePin(B12_GPIO_Port, B12_Pin, SET);
   }
-  else HAL_GPIO_WritePin(B1_GPIO_Port, B12_Pin, RESET);
+  else HAL_GPIO_WritePin(B12_GPIO_Port, B12_Pin, RESET);
 
   //bit 12
   if(digital&0x1000){
-    HAL_GPIO_WritePin(B1_GPIO_Port, B13_Pin, SET);
+    HAL_GPIO_WritePin(B13_GPIO_Port, B13_Pin, SET);
   }
-  else HAL_GPIO_WritePin(B1_GPIO_Port, B13_Pin, RESET);
+  else HAL_GPIO_WritePin(B13_GPIO_Port, B13_Pin, RESET);
 
   //bit 13
   if(digital&0x2000){

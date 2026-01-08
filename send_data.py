@@ -5,10 +5,17 @@ import time
 PORT = 'COM11'  # Sesuaikan dengan port kamu
 BAUD = 115200
 
-def send_broadcast(ser, values):
-    """Kirim broadcast initialization untuk semua device"""
-    # Format: "036 078 120 045 360"
-    data = " ".join([str(v).zfill(3) for v in values]) + "\n"
+def send_broadcast(ser, hex_values):
+    """Kirim broadcast initialization untuk semua device (10 HEX bytes)"""
+    # Format: "0x89 0x99 0x12 0x34 0xAB 0xCD 0x00 0xFF 0x80 0x00"
+    # 10 bytes total (2 bytes per device)
+    
+    if len(hex_values) != 10:
+        print("❌ Error: Harus 10 byte HEX!")
+        return
+    
+    # Kirim sebagai string HEX
+    data = " ".join(hex_values) + "\n"
     ser.write(data.encode())
     print(f"✓ Broadcast sent: {data.strip()}")
     time.sleep(0.3)
@@ -18,15 +25,22 @@ def send_broadcast(ser, values):
         response = ser.readline().decode().strip()
         print(f"  ← {response}")
 
-def send_device_command(ser, device_id, value):
-    """Kirim command ke device tertentu"""
+def send_device_command(ser, device_id, hex_high, hex_low):
+    """Kirim command ke device tertentu (2 HEX bytes)"""
     # Kirim device ID
     ser.write(f"#{device_id}\n".encode())
     time.sleep(0.1)
     
-    # Kirim value
-    ser.write(f"{value}\n".encode())
-    print(f"✓ Sent to Device #{device_id}: {value}")
+    # Kirim 2 bytes HEX
+    data = f"{hex_high} {hex_low}\n"
+    ser.write(data.encode())
+    
+    # Hitung 16-bit value untuk display
+    val_high = int(hex_high, 16)
+    val_low = int(hex_low, 16)
+    value_16bit = (val_high << 8) | val_low
+    
+    print(f"✓ Sent to Device #{device_id}: {hex_high} {hex_low} (16-bit: {value_16bit})")
     time.sleep(0.2)
     
     # Baca response
@@ -34,10 +48,31 @@ def send_device_command(ser, device_id, value):
         response = ser.readline().decode().strip()
         print(f"  ← {response}")
 
+def parse_hex_input(input_str):
+    """Parse input HEX dan validasi"""
+    parts = input_str.strip().split()
+    hex_values = []
+    
+    for part in parts:
+        # Tambahkan 0x jika belum ada
+        if not part.startswith('0x') and not part.startswith('0X'):
+            part = '0x' + part
+        
+        try:
+            # Validasi HEX
+            val = int(part, 16)
+            if val < 0 or val > 255:
+                return None, f"Nilai {part} harus 0x00-0xFF!"
+            hex_values.append(part)
+        except ValueError:
+            return None, f"Format HEX salah: {part}"
+    
+    return hex_values, None
+
 def main_menu():
     """Tampilkan menu update"""
     print("\n" + "="*50)
-    print("  UPDATE DEVICE")
+    print("  UPDATE DEVICE (HEX MODE)")
     print("="*50)
     print("0. Broadcast (set all 5 devices)")
     print("1. Update Device #1")
@@ -63,39 +98,35 @@ try:
     # INISIALISASI AWAL (WAJIB)
     # ============================================
     print("\n" + "="*50)
-    print("  INISIALISASI AWAL - BROADCAST")
+    print("  INISIALISASI AWAL - BROADCAST (HEX)")
     print("="*50)
-    print("Masukkan 5 nilai (0-360) untuk Device 1-5")
-    print("Contoh: 36 78 120 45 360")
+    print("Masukkan 10 byte HEX untuk 5 devices (2 byte per device)")
+    print("Format: 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH")
+    print("Contoh: 0x00 0x00 0x40 0x00 0x80 0x00 0xC0 0x00 0xFF 0xFF")
+    print("        └─────┘ └─────┘ └─────┘ └─────┘ └─────┘")
+    print("         Dev1    Dev2    Dev3    Dev4    Dev5")
     print("="*50)
     
     while True:
         try:
-            values_str = input("\nInput 5 nilai: ").strip()
-            values = [int(v) for v in values_str.split()]
+            input_str = input("\nInput 10 byte HEX: ").strip()
+            hex_values, error = parse_hex_input(input_str)
             
-            if len(values) != 5:
-                print("❌ Error: Harus 5 nilai!")
+            if error:
+                print(f"❌ Error: {error}")
                 continue
             
-            # Validasi range
-            valid = True
-            for i, v in enumerate(values):
-                if v < 0 or v > 360:
-                    print(f"❌ Error: Nilai {i+1} ({v}) harus 0-360!")
-                    valid = False
-                    break
-            
-            if not valid:
+            if len(hex_values) != 10:
+                print(f"❌ Error: Harus 10 byte! (kamu input {len(hex_values)} byte)")
                 continue
             
             # Kirim broadcast
-            send_broadcast(ser, values)
+            send_broadcast(ser, hex_values)
             print("\n✓ Inisialisasi selesai!\n")
             break
             
-        except ValueError:
-            print("❌ Error: Input harus angka!")
+        except Exception as e:
+            print(f"❌ Error: {e}")
     
     # ============================================
     # MENU UPDATE DEVICE
@@ -110,46 +141,47 @@ try:
         elif choice == '0':
             # Broadcast ulang
             print("\n--- Broadcast (Set All Devices) ---")
+            print("Format: 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH 0xHH")
             try:
-                values_str = input("Masukkan 5 nilai (0-360): ").strip()
-                values = [int(v) for v in values_str.split()]
+                input_str = input("Input 10 byte HEX: ").strip()
+                hex_values, error = parse_hex_input(input_str)
                 
-                if len(values) != 5:
-                    print("❌ Error: Harus 5 nilai!")
+                if error:
+                    print(f"❌ Error: {error}")
                     continue
                 
-                # Validasi range
-                valid = True
-                for i, v in enumerate(values):
-                    if v < 0 or v > 360:
-                        print(f"❌ Error: Nilai {i+1} harus 0-360!")
-                        valid = False
-                        break
-                
-                if not valid:
+                if len(hex_values) != 10:
+                    print(f"❌ Error: Harus 10 byte!")
                     continue
                 
-                send_broadcast(ser, values)
+                send_broadcast(ser, hex_values)
                 
-            except ValueError:
-                print("❌ Error: Input harus angka!")
+            except Exception as e:
+                print(f"❌ Error: {e}")
         
         elif choice in ['1', '2', '3', '4', '5']:
             # Update device tertentu
             device_id = int(choice)
             print(f"\n--- Update Device #{device_id} ---")
+            print("Format: 0xHH 0xHH (2 byte HEX)")
+            print("Contoh: 0x80 0x00 (32768 decimal = 180°)")
             
             try:
-                value = int(input(f"Masukkan nilai (0-360) untuk Device #{device_id}: "))
+                input_str = input(f"Input 2 byte HEX untuk Device #{device_id}: ").strip()
+                hex_values, error = parse_hex_input(input_str)
                 
-                if value < 0 or value > 360:
-                    print("❌ Error: Nilai harus 0-360!")
+                if error:
+                    print(f"❌ Error: {error}")
                     continue
                 
-                send_device_command(ser, device_id, value)
+                if len(hex_values) != 2:
+                    print(f"❌ Error: Harus 2 byte!")
+                    continue
                 
-            except ValueError:
-                print("❌ Error: Input harus angka!")
+                send_device_command(ser, device_id, hex_values[0], hex_values[1])
+                
+            except Exception as e:
+                print(f"❌ Error: {e}")
         
         else:
             print("❌ Pilihan tidak valid!")
