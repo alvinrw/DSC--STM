@@ -114,7 +114,7 @@ int main(void)
     if(HAL_UART_Receive(&huart1, &received_char, 1, 100) == HAL_OK){
       // Simpan karakter ke buffer
       if(received_char >= ' ' && received_char <= '~'){  // Printable ASCII
-        if(MY_UART1.text_index < 89){  // Buffer size is 90, leave 1 for null terminator
+        if(MY_UART1.text_index < 59){
           MY_UART1.text_buffer[MY_UART1.text_index] = received_char;
           MY_UART1.text_index++;
         }
