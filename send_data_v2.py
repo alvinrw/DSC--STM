@@ -43,12 +43,7 @@ def send_broadcast(ser, hex_values):
     print(f"\n✓ Broadcast sent (15 bytes):")
     print(f"  {data.strip()}")
     time.sleep(0.3)
-    
-    # Baca response dari semua device
-    print("\n📡 Response dari devices:")
-    while ser.in_waiting > 0:
-        response = ser.readline().decode().strip()
-        print(f"  ← {response}")
+
     
     return True
 
