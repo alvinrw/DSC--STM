@@ -483,3 +483,41 @@
 2026-01-08 12:37:12,742 [INFO] ThirdParty:978 - Integrity check success = true
 2026-01-08 12:37:12,742 [INFO] IntegrityCheckThread:100 - exiting critical section [integrity check]
 2026-01-08 12:37:12,742 [INFO] IntegrityCheckThread:103 - End integrity checks thread
+2026-01-08 14:46:47,583 [INFO] WebApp:190 - Connection lost
+2026-01-08 14:46:48,032 [INFO] WebApp:187 - Connection restablished
+2026-01-08 15:34:40,487 [INFO] WebApp:190 - Connection lost
+2026-01-08 15:35:02,608 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 15:35:04,669 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 15:35:06,686 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 15:35:08,868 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 15:35:10,876 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 15:35:12,883 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 15:35:13,948 [INFO] WebApp:187 - Connection restablished
+2026-01-08 15:35:24,460 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 15:35:24.416 ERROR Chromium process exit code: -1,073,741,819
+2026-01-08 15:35:24,462 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2026-01-08 15:35:24,467 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 15:35:24.464 ERROR Crash dump dir: C:\Users\alvin\AppData\Local\JxBrowser\7.39.2\CrashReports
+2026-01-08 15:35:24,467 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2026-01-08 15:35:24,508 [ERROR] WebApp:398 - JxBrowser engine crashed! Exit code: -1073741819
+2026-01-08 15:57:34,147 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 15:57:36,155 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 15:57:38,164 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 15:57:40,188 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 15:57:42,231 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 15:57:44,246 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 16:41:56,851 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 16:41:58,867 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 16:42:01,889 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 16:42:03,937 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 16:42:05,957 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 16:42:08,022 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 16:45:41,262 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 16:45:43,273 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 16:45:45,279 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 16:45:47,311 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 16:45:49,324 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 16:45:51,331 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 17:36:12,534 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 17:36:14,690 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 17:36:16,715 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2026-01-08 17:36:23,295 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2026-01-08 17:36:23,296 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 

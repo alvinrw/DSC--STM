@@ -1,7 +1,7 @@
 #include "main.h"
 
-void dsc(uint16_t digital){
-  // No conversion needed - use digital value directly
+void dsc(float degree){
+  uint16_t digital=(uint16_t) ((float)(degree*65535.0)/360.0);
   // No delay needed - GPIO write is fast (microseconds)
   //bit 0
   if(digital&0x0001){

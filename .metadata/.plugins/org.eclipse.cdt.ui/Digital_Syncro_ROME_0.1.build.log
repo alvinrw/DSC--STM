@@ -1,4 +1,4 @@
-14:23:57 **** Incremental Build of configuration Debug for project Digital_Syncro_ROME_0.1 ****
+16:45:37 **** Incremental Build of configuration Debug for project Digital_Syncro_ROME_0.1 ****
 make all 
 arm-none-eabi-gcc "../Src/dsc_rome_16b.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/dsc_rome_16b.d" -MT"Src/dsc_rome_16b.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/dsc_rome_16b.o"
 arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/main.o"
@@ -37,7 +37,7 @@ Finished building target: Digital_Syncro_ROME_0.1.elf
  
 arm-none-eabi-size  Digital_Syncro_ROME_0.1.elf 
    text	   data	    bss	    dec	    hex	filename
-  38664	    500	   3284	  42448	   a5d0	Digital_Syncro_ROME_0.1.elf
+  38584	    500	   3284	  42368	   a580	Digital_Syncro_ROME_0.1.elf
 Finished building: default.size.stdout
  
 arm-none-eabi-objdump -h -S Digital_Syncro_ROME_0.1.elf  > "Digital_Syncro_ROME_0.1.list"
@@ -47,5 +47,5 @@ arm-none-eabi-objcopy  -O ihex Digital_Syncro_ROME_0.1.elf  "Digital_Syncro_ROME
 Finished building: Digital_Syncro_ROME_0.1.hex
  
 
-14:23:59 Build Finished. 0 errors, 4 warnings. (took 1s.901ms)
+16:45:39 Build Finished. 0 errors, 4 warnings. (took 1s.741ms)
 
