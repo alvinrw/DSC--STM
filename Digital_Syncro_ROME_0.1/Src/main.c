@@ -146,15 +146,12 @@ int main(void)
 
             // Check if we received exactly 15 bytes
             if(byte_index != 15){
-              sprintf(txt, "Dev#%d: Expected 15 bytes, got %d\r\n", DEVICE_ID, byte_index);
-              HAL_UART_Transmit(&huart1, (uint8_t*)txt, strlen(txt), 100);
+              // Silently discard - wrong byte count
             }
             else{
               // Validate header (bytes 0-1 must be 0xA5 0x99)
               if(bytes[0] != PROTOCOL_HEADER_1 || bytes[1] != PROTOCOL_HEADER_2){
-                sprintf(txt, "Dev#%d: Invalid header (0x%02X 0x%02X)\r\n", 
-                        DEVICE_ID, bytes[0], bytes[1]);
-                HAL_UART_Transmit(&huart1, (uint8_t*)txt, strlen(txt), 100);
+                // Silently discard - invalid header
               }
               else{
                 // Header valid! Parse device data from bytes 6-15 (indices 5-14)
