@@ -1,0 +1,6 @@
+Interactive Serial Monitor Log - Started at 2026-01-12 09:48:17.293876
+Port: COM17, Baud: 115200
+================================================================================
+
+[09:48:51.372] → ❌ ERROR        | Harus 15 byte HEX! (input 3 byte)
+[09:49:31.755] → 📤 SENT         | 0xA5 0x99 0x01 0x00 0x00 0x00 0x00 0x40 0x00 0x80 0x00 0xC0 0x00 0xFF 0xFF
