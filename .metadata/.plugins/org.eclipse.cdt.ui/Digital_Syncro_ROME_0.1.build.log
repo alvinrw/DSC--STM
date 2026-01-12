@@ -1,7 +1,13 @@
-12:20:55 **** Incremental Build of configuration Debug for project Digital_Syncro_ROME_0.1 ****
+13:44:34 **** Incremental Build of configuration Debug for project Digital_Syncro_ROME_0.1 ****
 make all 
-arm-none-eabi-gcc "../Src/dsc_rome_16b.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/dsc_rome_16b.d" -MT"Src/dsc_rome_16b.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/dsc_rome_16b.o"
 arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:211:60: warning: 'sprintf' may write a terminating nul past the end of the destination [-Wformat-overflow=]
+  211 |                 sprintf(txt, "Rel.Course: %u (%.2f deg)\r\n", digital_val, syncro_val);
+      |                                                            ^
+../Src/main.c:211:17: note: 'sprintf' output between 26 and 340 bytes into a destination of size 30
+  211 |                 sprintf(txt, "Rel.Course: %u (%.2f deg)\r\n", digital_val, syncro_val);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 arm-none-eabi-gcc "../Src/stm32f1xx_hal_msp.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/stm32f1xx_hal_msp.d" -MT"Src/stm32f1xx_hal_msp.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/stm32f1xx_hal_msp.o"
 arm-none-eabi-gcc "../Src/stm32f1xx_it.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/stm32f1xx_it.d" -MT"Src/stm32f1xx_it.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/stm32f1xx_it.o"
 arm-none-eabi-gcc -o "Digital_Syncro_ROME_0.1.elf" @"objects.list"   -mcpu=cortex-m3 -T"../STM32F103C8Tx_FLASH.ld" --specs=nosys.specs -Wl,-Map="Digital_Syncro_ROME_0.1.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
@@ -10,7 +16,7 @@ Finished building target: Digital_Syncro_ROME_0.1.elf
  
 arm-none-eabi-size  Digital_Syncro_ROME_0.1.elf 
    text	   data	    bss	    dec	    hex	filename
-  37760	    500	   3284	  41544	   a248	Digital_Syncro_ROME_0.1.elf
+  37776	    500	   3284	  41560	   a258	Digital_Syncro_ROME_0.1.elf
 Finished building: default.size.stdout
  
 arm-none-eabi-objdump -h -S Digital_Syncro_ROME_0.1.elf  > "Digital_Syncro_ROME_0.1.list"
@@ -20,5 +26,5 @@ arm-none-eabi-objcopy  -O ihex Digital_Syncro_ROME_0.1.elf  "Digital_Syncro_ROME
 Finished building: Digital_Syncro_ROME_0.1.hex
  
 
-12:20:58 Build Finished. 0 errors, 1 warnings. (took 2s.717ms)
+13:44:36 Build Finished. 0 errors, 2 warnings. (took 1s.839ms)
 

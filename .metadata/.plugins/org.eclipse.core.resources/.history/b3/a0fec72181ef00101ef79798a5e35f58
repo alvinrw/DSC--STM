@@ -161,10 +161,7 @@ int main(void)
                 // Relative Course encoding: (angle + 179.9) * 10
                 // Decode: (value / 10) - 179.9
                 // Range: -179.9° to +179.9°
-                // NOTE: Raspi sends signed int16, so we need to convert from unsigned
-                
-                int16_t signed_val = (int16_t)digital_val;  // Convert to signed
-                syncro_val = ((float)signed_val / 10.0f) - 179.9f;
+                syncro_val = ((float)digital_val / 10.0f) - 179.9f;
               }
               else if(DEVICE_ID >= 1 && DEVICE_ID <= 4){
                 // Standard encoding: angle * 10
