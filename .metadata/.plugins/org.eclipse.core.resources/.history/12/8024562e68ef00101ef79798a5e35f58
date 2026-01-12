@@ -109,101 +109,115 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  
-  // Buffer untuk terima 15 bytes binary
-  uint8_t rx_buffer[15];
-  uint8_t rx_index = 0;
-  
   while (1)
   {
-    // Terima 1 byte binary
-    uint8_t received_byte;
-    if(HAL_UART_Receive(&huart1, &received_byte, 1, 10) == HAL_OK){
-      
-      // Cek apakah ini start of packet (header byte 1)
-      if(rx_index == 0 && received_byte == PROTOCOL_HEADER_1){
-        rx_buffer[rx_index++] = received_byte;
-      }
-      // Cek header byte 2
-      else if(rx_index == 1){
-        if(received_byte == PROTOCOL_HEADER_2){
-          rx_buffer[rx_index++] = received_byte;
-        }
-        else{
-          // Invalid header, reset
-          rx_index = 0;
+    // Polling UART - Terima 1 byte
+    uint8_t received_char;
+    if(HAL_UART_Receive(&huart1, &received_char, 1, 100) == HAL_OK){
+      // Simpan karakter ke buffer
+      if(received_char >= ' ' && received_char <= '~'){  // Printable ASCII
+        if(MY_UART1.text_index < 89){  // Buffer size is 90, leave 1 for null terminator
+          MY_UART1.text_buffer[MY_UART1.text_index] = received_char;
+          MY_UART1.text_index++;
         }
       }
-      // Collect remaining bytes
-      else if(rx_index > 1 && rx_index < 15){
-        rx_buffer[rx_index++] = received_byte;
-        
-        // Jika sudah 15 bytes, proses packet
-        if(rx_index == 15){
-          // Parse device data from bytes 6-15 (indices 5-14)
-          // Bytes 2-4 (indices 2-4) are Discrete A, B, C (ignored for now)
-          
-          int data_index = 5;  // Start from byte 6 (index 5)
-          
-          for(int dev = 1; dev <= 5; dev++){
-            if(dev == DEVICE_ID){
-              uint8_t byte_high = rx_buffer[data_index];
-              uint8_t byte_low = rx_buffer[data_index + 1];
+      // Jika terima newline, proses data
+      else if(received_char == '\n' || received_char == '\r'){
+        if(MY_UART1.text_index > 0){
+          // Null-terminate
+          MY_UART1.text_buffer[MY_UART1.text_index] = '\0';
 
-              digital_val = (uint16_t)((byte_high << 8) | byte_low);
-              
-              // Different encoding for Pitch/Roll (Device 1-2) vs Synchro 3-5
-              if(DEVICE_ID == 1 || DEVICE_ID == 2){
-                // Pitch/Roll encoding: angle * 10
-                // Example: 278.4° = 2784 = 0x0AE0
-                syncro_val = (float)digital_val / 10.0f;
-              }
-              else{
-                // Standard synchro encoding: 0-65535 maps to 0-360°
-                syncro_val = (float)digital_val * 360.0f / 65535.0f;
-              }
+          // Broadcast initialization (15 HEX bytes with header validation)
+          if(strchr(MY_UART1.text_buffer, ' ') != NULL){
+            // Parse 15 HEX bytes
+            char temp_buffer[90];
+            strcpy(temp_buffer, MY_UART1.text_buffer);
 
-              SSD1306_GotoXY(10,15);
-              sprintf(txt, "Digital: %u   ", digital_val);
-              SSD1306_Puts(txt, &Font_7x10, 1);
+            char *token = strtok(temp_buffer, " ");
+            int byte_index = 0;
+            uint8_t bytes[15];
 
-              SSD1306_GotoXY(10,35);
-              sprintf(txt, "Syncro: %.2f  ", syncro_val);
-              SSD1306_Puts(txt, &Font_7x10, 1);
-
-              SSD1306_UpdateScreen();
-
-              dsc(digital_val);  // Pass digital value directly, not degree
-
-              // Blink LED (broadcast received) - Quick blink to avoid UART blocking
-              HAL_GPIO_WritePin(LED_BLINK_GPIO_Port, LED_BLINK_Pin, GPIO_PIN_RESET);
-              HAL_Delay(20);  // Reduced from 100ms - still visible but faster
-              HAL_GPIO_WritePin(LED_BLINK_GPIO_Port, LED_BLINK_Pin, GPIO_PIN_SET);
-
-              // Different label for Pitch/Roll vs Synchro
-              if(DEVICE_ID == 1){
-                sprintf(txt, "Pitch: %u (%.2f deg)\r\n", digital_val, syncro_val);
-              }
-              else if(DEVICE_ID == 2){
-                sprintf(txt, "Roll: %u (%.2f deg)\r\n", digital_val, syncro_val);
-              }
-              else{
-                sprintf(txt, "Synchro#%d: %u (%.2f deg)\r\n", DEVICE_ID, digital_val, syncro_val);
-              }
-              HAL_UART_Transmit(&huart1, (uint8_t*)txt, strlen(txt), 100);
-
-              break;
+            // Collect all 15 bytes
+            while(token != NULL && byte_index < 15){
+              bytes[byte_index] = (uint8_t)strtol(token, NULL, 16);
+              token = strtok(NULL, " ");
+              byte_index++;
             }
-            data_index += 2;
+
+            // Check if we received exactly 15 bytes
+            if(byte_index != 15){
+              // Silently discard - wrong byte count
+            }
+            else{
+              // Validate header (bytes 0-1 must be 0xA5 0x99)
+              if(bytes[0] != PROTOCOL_HEADER_1 || bytes[1] != PROTOCOL_HEADER_2){
+                // Silently discard - invalid header
+              }
+              else{
+                // Header valid! Parse device data from bytes 6-15 (indices 5-14)
+                // Bytes 2-4 (indices 2-4) are Discrete A, B, C (ignored for now)
+                
+                int data_index = 5;  // Start from byte 6 (index 5)
+                
+                for(int dev = 1; dev <= 5; dev++){
+                  if(dev == DEVICE_ID){
+                    uint8_t byte_high = bytes[data_index];
+                    uint8_t byte_low = bytes[data_index + 1];
+
+                    digital_val = (uint16_t)((byte_high << 8) | byte_low);
+                    
+                    // Different encoding for Pitch/Roll (Device 1-2) vs Synchro 3-5
+                    if(DEVICE_ID == 1 || DEVICE_ID == 2){
+                      // Pitch/Roll encoding: angle * 10
+                      // Example: 278.4° = 2784 = 0x0AE0
+                      syncro_val = (float)digital_val / 10.0f;
+                    }
+                    else{
+                      // Standard synchro encoding: 0-65535 maps to 0-360°
+                      syncro_val = (float)digital_val * 360.0f / 65535.0f;
+                    }
+
+                    SSD1306_GotoXY(10,15);
+                    sprintf(txt, "Digital: %u   ", digital_val);
+                    SSD1306_Puts(txt, &Font_7x10, 1);
+
+                    SSD1306_GotoXY(10,35);
+                    sprintf(txt, "Syncro: %.2f  ", syncro_val);
+                    SSD1306_Puts(txt, &Font_7x10, 1);
+
+                    SSD1306_UpdateScreen();
+
+                    dsc(digital_val);  // Pass digital value directly, not degree
+
+                    // Blink LED (broadcast received) - Quick blink to avoid UART blocking
+                    HAL_GPIO_WritePin(LED_BLINK_GPIO_Port, LED_BLINK_Pin, GPIO_PIN_RESET);
+                    HAL_Delay(20);  // Reduced from 100ms - still visible but faster
+                    HAL_GPIO_WritePin(LED_BLINK_GPIO_Port, LED_BLINK_Pin, GPIO_PIN_SET);
+
+                    // Different label for Pitch/Roll vs Synchro
+                    if(DEVICE_ID == 1){
+                      sprintf(txt, "Pitch: %u (%.2f deg)\r\n", digital_val, syncro_val);
+                    }
+                    else if(DEVICE_ID == 2){
+                      sprintf(txt, "Roll: %u (%.2f deg)\r\n", digital_val, syncro_val);
+                    }
+                    else{
+                      sprintf(txt, "Synchro#%d: %u (%.2f deg)\r\n", DEVICE_ID, digital_val, syncro_val);
+                    }
+                    HAL_UART_Transmit(&huart1, (uint8_t*)txt, strlen(txt), 100);
+
+                    break;
+                  }
+                  data_index += 2;
+                }
+              }
+            }
           }
-          
-          // Reset untuk packet berikutnya
-          rx_index = 0;
+
+          // Reset buffer
+          MY_UART1.text_index = 0;
+          memset(MY_UART1.text_buffer, 0, sizeof(MY_UART1.text_buffer));
         }
-      }
-      else{
-        // Out of sync, reset
-        rx_index = 0;
       }
     }
 

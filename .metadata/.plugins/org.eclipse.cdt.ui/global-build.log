@@ -1062,3 +1062,155 @@ Finished building: Digital_Syncro_ROME_0.1.list
 arm-none-eabi-objcopy  -O ihex Digital_Syncro_ROME_0.1.elf  "Digital_Syncro_ROME_0.1.hex"
 Finished building: Digital_Syncro_ROME_0.1.hex
  
+16:14:58 **** Incremental Build of configuration Debug for project Digital_Syncro_ROME_0.1 ****
+make all 
+arm-none-eabi-gcc "../Src/dsc_rome_16b.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/dsc_rome_16b.d" -MT"Src/dsc_rome_16b.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/dsc_rome_16b.o"
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:187:65: warning: 'sprintf' may write a terminating nul past the end of the destination [-Wformat-overflow=]
+  187 |                     sprintf(txt, "Dev#%d Init: %u (%.2f deg)\r\n", DEVICE_ID, digital_val, syncro_val);
+      |                                                                 ^
+../Src/main.c:187:21: note: 'sprintf' output between 26 and 340 bytes into a destination of size 30
+  187 |                     sprintf(txt, "Dev#%d Init: %u (%.2f deg)\r\n", DEVICE_ID, digital_val, syncro_val);
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arm-none-eabi-gcc "../Src/stm32f1xx_hal_msp.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/stm32f1xx_hal_msp.d" -MT"Src/stm32f1xx_hal_msp.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/stm32f1xx_hal_msp.o"
+arm-none-eabi-gcc "../Src/stm32f1xx_it.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/stm32f1xx_it.d" -MT"Src/stm32f1xx_it.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/stm32f1xx_it.o"
+arm-none-eabi-gcc -o "Digital_Syncro_ROME_0.1.elf" @"objects.list"   -mcpu=cortex-m3 -T"../STM32F103C8Tx_FLASH.ld" --specs=nosys.specs -Wl,-Map="Digital_Syncro_ROME_0.1.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: warning: Digital_Syncro_ROME_0.1.elf has a LOAD segment with RWX permissions
+Finished building target: Digital_Syncro_ROME_0.1.elf
+ 
+arm-none-eabi-size  Digital_Syncro_ROME_0.1.elf 
+   text	   data	    bss	    dec	    hex	filename
+  38424	    500	   3284	  42208	   a4e0	Digital_Syncro_ROME_0.1.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S Digital_Syncro_ROME_0.1.elf  > "Digital_Syncro_ROME_0.1.list"
+Finished building: Digital_Syncro_ROME_0.1.list
+ 
+arm-none-eabi-objcopy  -O ihex Digital_Syncro_ROME_0.1.elf  "Digital_Syncro_ROME_0.1.hex"
+Finished building: Digital_Syncro_ROME_0.1.hex
+ 
+16:21:12 **** Incremental Build of configuration Debug for project Digital_Syncro_ROME_0.1 ****
+make all 
+arm-none-eabi-gcc "../Src/dsc_rome_16b.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/dsc_rome_16b.d" -MT"Src/dsc_rome_16b.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/dsc_rome_16b.o"
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:187:65: warning: 'sprintf' may write a terminating nul past the end of the destination [-Wformat-overflow=]
+  187 |                     sprintf(txt, "Dev#%d Init: %u (%.2f deg)\r\n", DEVICE_ID, digital_val, syncro_val);
+      |                                                                 ^
+../Src/main.c:187:21: note: 'sprintf' output between 26 and 340 bytes into a destination of size 30
+  187 |                     sprintf(txt, "Dev#%d Init: %u (%.2f deg)\r\n", DEVICE_ID, digital_val, syncro_val);
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arm-none-eabi-gcc "../Src/stm32f1xx_hal_msp.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/stm32f1xx_hal_msp.d" -MT"Src/stm32f1xx_hal_msp.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/stm32f1xx_hal_msp.o"
+arm-none-eabi-gcc "../Src/stm32f1xx_it.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/stm32f1xx_it.d" -MT"Src/stm32f1xx_it.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/stm32f1xx_it.o"
+arm-none-eabi-gcc -o "Digital_Syncro_ROME_0.1.elf" @"objects.list"   -mcpu=cortex-m3 -T"../STM32F103C8Tx_FLASH.ld" --specs=nosys.specs -Wl,-Map="Digital_Syncro_ROME_0.1.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: warning: Digital_Syncro_ROME_0.1.elf has a LOAD segment with RWX permissions
+Finished building target: Digital_Syncro_ROME_0.1.elf
+ 
+arm-none-eabi-size  Digital_Syncro_ROME_0.1.elf 
+   text	   data	    bss	    dec	    hex	filename
+  38424	    500	   3284	  42208	   a4e0	Digital_Syncro_ROME_0.1.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S Digital_Syncro_ROME_0.1.elf  > "Digital_Syncro_ROME_0.1.list"
+Finished building: Digital_Syncro_ROME_0.1.list
+ 
+arm-none-eabi-objcopy  -O ihex Digital_Syncro_ROME_0.1.elf  "Digital_Syncro_ROME_0.1.hex"
+Finished building: Digital_Syncro_ROME_0.1.hex
+ 
+10:33:19 **** Incremental Build of configuration Debug for project Digital_Syncro_ROME_0.1 ****
+make all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/main.o"
+arm-none-eabi-gcc -o "Digital_Syncro_ROME_0.1.elf" @"objects.list"   -mcpu=cortex-m3 -T"../STM32F103C8Tx_FLASH.ld" --specs=nosys.specs -Wl,-Map="Digital_Syncro_ROME_0.1.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: warning: Digital_Syncro_ROME_0.1.elf has a LOAD segment with RWX permissions
+Finished building target: Digital_Syncro_ROME_0.1.elf
+ 
+arm-none-eabi-size  Digital_Syncro_ROME_0.1.elf 
+   text	   data	    bss	    dec	    hex	filename
+  38424	    500	   3284	  42208	   a4e0	Digital_Syncro_ROME_0.1.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S Digital_Syncro_ROME_0.1.elf  > "Digital_Syncro_ROME_0.1.list"
+Finished building: Digital_Syncro_ROME_0.1.list
+ 
+arm-none-eabi-objcopy  -O ihex Digital_Syncro_ROME_0.1.elf  "Digital_Syncro_ROME_0.1.hex"
+Finished building: Digital_Syncro_ROME_0.1.hex
+ 
+10:34:25 **** Incremental Build of configuration Debug for project Digital_Syncro_ROME_0.1 ****
+make all 
+arm-none-eabi-gcc "../Src/dsc_rome_16b.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/dsc_rome_16b.d" -MT"Src/dsc_rome_16b.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/dsc_rome_16b.o"
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/main.o"
+arm-none-eabi-gcc "../Src/stm32f1xx_hal_msp.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/stm32f1xx_hal_msp.d" -MT"Src/stm32f1xx_hal_msp.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/stm32f1xx_hal_msp.o"
+arm-none-eabi-gcc "../Src/stm32f1xx_it.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/stm32f1xx_it.d" -MT"Src/stm32f1xx_it.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/stm32f1xx_it.o"
+arm-none-eabi-gcc -o "Digital_Syncro_ROME_0.1.elf" @"objects.list"   -mcpu=cortex-m3 -T"../STM32F103C8Tx_FLASH.ld" --specs=nosys.specs -Wl,-Map="Digital_Syncro_ROME_0.1.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: warning: Digital_Syncro_ROME_0.1.elf has a LOAD segment with RWX permissions
+Finished building target: Digital_Syncro_ROME_0.1.elf
+ 
+arm-none-eabi-size  Digital_Syncro_ROME_0.1.elf 
+   text	   data	    bss	    dec	    hex	filename
+  38376	    500	   3284	  42160	   a4b0	Digital_Syncro_ROME_0.1.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S Digital_Syncro_ROME_0.1.elf  > "Digital_Syncro_ROME_0.1.list"
+Finished building: Digital_Syncro_ROME_0.1.list
+ 
+arm-none-eabi-objcopy  -O ihex Digital_Syncro_ROME_0.1.elf  "Digital_Syncro_ROME_0.1.hex"
+Finished building: Digital_Syncro_ROME_0.1.hex
+ 
+10:38:38 **** Incremental Build of configuration Debug for project Digital_Syncro_ROME_0.1 ****
+make all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/main.o"
+arm-none-eabi-gcc -o "Digital_Syncro_ROME_0.1.elf" @"objects.list"   -mcpu=cortex-m3 -T"../STM32F103C8Tx_FLASH.ld" --specs=nosys.specs -Wl,-Map="Digital_Syncro_ROME_0.1.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: warning: Digital_Syncro_ROME_0.1.elf has a LOAD segment with RWX permissions
+Finished building target: Digital_Syncro_ROME_0.1.elf
+ 
+arm-none-eabi-size  Digital_Syncro_ROME_0.1.elf 
+   text	   data	    bss	    dec	    hex	filename
+  38376	    500	   3284	  42160	   a4b0	Digital_Syncro_ROME_0.1.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S Digital_Syncro_ROME_0.1.elf  > "Digital_Syncro_ROME_0.1.list"
+Finished building: Digital_Syncro_ROME_0.1.list
+ 
+arm-none-eabi-objcopy  -O ihex Digital_Syncro_ROME_0.1.elf  "Digital_Syncro_ROME_0.1.hex"
+Finished building: Digital_Syncro_ROME_0.1.hex
+ 
+11:22:21 **** Incremental Build of configuration Debug for project Digital_Syncro_ROME_0.1 ****
+make all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/main.o"
+arm-none-eabi-gcc -o "Digital_Syncro_ROME_0.1.elf" @"objects.list"   -mcpu=cortex-m3 -T"../STM32F103C8Tx_FLASH.ld" --specs=nosys.specs -Wl,-Map="Digital_Syncro_ROME_0.1.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: warning: Digital_Syncro_ROME_0.1.elf has a LOAD segment with RWX permissions
+Finished building target: Digital_Syncro_ROME_0.1.elf
+ 
+arm-none-eabi-size  Digital_Syncro_ROME_0.1.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37736	    500	   3284	  41520	   a230	Digital_Syncro_ROME_0.1.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S Digital_Syncro_ROME_0.1.elf  > "Digital_Syncro_ROME_0.1.list"
+Finished building: Digital_Syncro_ROME_0.1.list
+ 
+arm-none-eabi-objcopy  -O ihex Digital_Syncro_ROME_0.1.elf  "Digital_Syncro_ROME_0.1.hex"
+Finished building: Digital_Syncro_ROME_0.1.hex
+ 
+12:20:55 **** Incremental Build of configuration Debug for project Digital_Syncro_ROME_0.1 ****
+make all 
+arm-none-eabi-gcc "../Src/dsc_rome_16b.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/dsc_rome_16b.d" -MT"Src/dsc_rome_16b.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/dsc_rome_16b.o"
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/main.o"
+arm-none-eabi-gcc "../Src/stm32f1xx_hal_msp.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/stm32f1xx_hal_msp.d" -MT"Src/stm32f1xx_hal_msp.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/stm32f1xx_hal_msp.o"
+arm-none-eabi-gcc "../Src/stm32f1xx_it.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/stm32f1xx_it.d" -MT"Src/stm32f1xx_it.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/stm32f1xx_it.o"
+arm-none-eabi-gcc -o "Digital_Syncro_ROME_0.1.elf" @"objects.list"   -mcpu=cortex-m3 -T"../STM32F103C8Tx_FLASH.ld" --specs=nosys.specs -Wl,-Map="Digital_Syncro_ROME_0.1.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: warning: Digital_Syncro_ROME_0.1.elf has a LOAD segment with RWX permissions
+Finished building target: Digital_Syncro_ROME_0.1.elf
+ 
+arm-none-eabi-size  Digital_Syncro_ROME_0.1.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37760	    500	   3284	  41544	   a248	Digital_Syncro_ROME_0.1.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S Digital_Syncro_ROME_0.1.elf  > "Digital_Syncro_ROME_0.1.list"
+Finished building: Digital_Syncro_ROME_0.1.list
+ 
+arm-none-eabi-objcopy  -O ihex Digital_Syncro_ROME_0.1.elf  "Digital_Syncro_ROME_0.1.hex"
+Finished building: Digital_Syncro_ROME_0.1.hex
+ 

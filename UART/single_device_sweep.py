@@ -2,7 +2,7 @@ import serial
 import time
 
 # Konfigurasi
-PORT = 'COM11'  # Sesuaikan dengan port kamu
+PORT = 'COM17'  # Sesuaikan dengan port kamu
 BAUD = 115200
 DEVICE_ID = 3  # Device yang akan ditest (1-5)
 STEP_DEGREE = 15  # Increment derajat (bisa diganti: 5, 10, 15, 30, 45, dll)

@@ -2,7 +2,7 @@ import serial
 import time
 
 # Konfigurasi serial port
-PORT = 'COM11'  # Sesuaikan dengan port kamu
+PORT = 'COM17'  # Sesuaikan dengan port kamu
 BAUD = 115200
 
 def parse_hex_input(input_str):
