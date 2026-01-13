@@ -1,0 +1,22 @@
+!SESSION 2026-01-13 09:09:18.805 -----------------------------------------------
+eclipse.buildId=Version 1.17.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_ID
+Framework arguments:  C:\Users\alvin\Documents\Coolyeah\pkl\TUGAS\Synchro_ROME\github\DSC--STM\Device_STM32\.cproject
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\alvin\Documents\Coolyeah\pkl\TUGAS\Synchro_ROME\github\DSC--STM\Device_STM32\.cproject
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2026-01-13 09:10:11.192
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-01-13 09:10:11.195
+!MESSAGE Log4j2 initialized with config file C:\Users\alvin\Documents\Coolyeah\pkl\TUGAS\Synchro_ROME\github\DSC--STM\Digital_Syncro_ROME_0.1\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-01-13 09:10:15.479
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-01-13 09:10:31.037
+!MESSAGE Indexed 'Digital_Syncro_ROME' (23 sources, 104 headers) in 10.9 sec: 8,553 declarations; 35,278 references; 6 unresolved inclusions; 291 syntax errors; 3,118 unresolved names (6.6%)
+
+!ENTRY org.eclipse.core.jobs 2 2 2026-01-13 09:12:08.966
+!MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: org.eclipse.ui.internal.Workbench$39
