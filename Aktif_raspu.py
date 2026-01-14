@@ -3,7 +3,7 @@ import threading
 import time
 
 # ===== KONFIGURASI DI SINI =====
-PORT = 'COM11'  # Ganti sesuai port kamu (COM17, /dev/ttyUSB0, dll)
+PORT = 'COM17'  # Ganti sesuai port kamu (COM17, /dev/ttyUSB0, dll)
 BAUDRATE = 115200
 SEND_DATA = bytes([0x99, 0xA5, 0x01])  # Data yang dikirim (HEX)
 DELAY_MS = 5  # Delay kirim dalam ms

@@ -40,18 +40,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-
-// ============================================
-// DEVICE ID CONFIGURATION
-// Change this for each STM32 device (1-5)
-// ============================================
-#define DEVICE_ID 1  // Device 1, 2, 3, 4, or 5
-
-// Protocol definitions
-#define SERIAL_DIST_MARKER  0xBB
-#define SERIAL_PACKET_SIZE  4
-
-#define len_uart1	20  // Buffer untuk ASCII text input
+#define len_uart1	10
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -62,9 +51,9 @@ extern "C" {
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
 struct UART_RX{
+	uint8_t UART_RX[len_uart1];
+	uint8_t CS;
 	float buffer_sync;
-	char text_buffer[90];  // Buffer untuk ASCII text (15-byte broadcast needs ~80 chars)
-	uint8_t text_index;
 };
 typedef struct UART_RX MY_UART;
 
