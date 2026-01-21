@@ -23,6 +23,14 @@ uint8_t rx_index = 0;
 uint32_t packets_received = 0;
 uint32_t packets_distributed = 0;
 
+// Discrete data parsing (dari USART_masudin)
+uint8_t payload[15];
+uint8_t discreate_A[8];
+uint8_t discreate_B[8];
+uint8_t discreate_C[8];
+const char *navigation_source = NULL;
+const char *country_code = NULL;
+
 /* Function Prototypes */
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -67,21 +75,74 @@ int main(void)
         if(rx_index == 15){
           packets_received++;
           
+          // Parse discrete data (LENGKAP - semua bits)
+          for(int i=0; i<8; i++){
+            discreate_A[i] = (rx_buffer[2] >> i & 0x01);
+            discreate_B[i] = (rx_buffer[3] >> i & 0x01);
+            discreate_C[i] = (rx_buffer[4] >> i & 0x01);
+          }
+          
+          // ========== DISCRETE A ==========
+          uint8_t gs_valid = discreate_A[0];
+          uint8_t gyro_monitor = discreate_A[1];
+          uint8_t fd_validity_flag = discreate_A[2];
+          uint8_t rot_valid_signal = discreate_A[3];
+          uint8_t nvis_sel = discreate_A[4];
+          uint8_t dh_input = discreate_A[5];
+          
+          // ========== DISCRETE B ==========
+          // Bit 0-1: EFD-5.5 Run Mode
+          uint8_t run_mode = (discreate_B[1] << 1) | discreate_B[0];
+          const char *run_mode_str = NULL;
+          if(run_mode == 0x00) run_mode_str = "EADI";
+          else if(run_mode == 0x01) run_mode_str = "EHSI";
+          else if(run_mode == 0x02) run_mode_str = "RDU";
+          
+          // Bit 2-3: Navigation Source
+          uint8_t nav_src = (discreate_B[3] << 1) | discreate_B[2];
+          if(nav_src == 0x00) navigation_source = "INS";
+          else if(nav_src == 0x01) navigation_source = "TAC";
+          else if(nav_src == 0x02) navigation_source = "VOR/ILS";
+          
+          uint8_t auto_test = discreate_B[4];
+          uint8_t lat_bar_in_view = discreate_B[5];
+          uint8_t ils_freq_tuned = discreate_B[6];
+          uint8_t nav_super_flag = discreate_B[7];
+          
+          // ========== DISCRETE C ==========
+          // Bit 0-1: Country Code
+          uint8_t country = (discreate_C[1] << 1) | discreate_C[0];
+          if(country == 0x00) country_code = "TNI AU";
+          else if(country == 0x01) country_code = "Bangladesh";
+          
+          uint8_t radio_altimeter_mon = discreate_C[2];
+          uint8_t rev_mode_enable = discreate_C[3];
+          uint8_t inner_marker = discreate_C[4];
+          uint8_t outer_marker = discreate_C[5];
+          uint8_t middle_marker = discreate_C[6];
+          
+          /* NOTE: Discrete variables tersedia untuk digunakan:
+           * - run_mode_str, navigation_source, country_code (strings)
+           * - gs_valid, gyro_monitor, auto_test, markers, dll (uint8_t flags)
+           * Uncomment code di atas jika ingin menggunakan discrete data
+           */
+          
+          
           /* --- Distribusi ke 5 Device via UART2 --- */
           for(int dev = 0; dev < 5; dev++){
             uint8_t data_index = 5 + (dev * 2);
             uint8_t msb = rx_buffer[data_index];
             uint8_t lsb = rx_buffer[data_index + 1];
             
-            // Paket 4-Byte: [0xBB, ID, MSB, LSB]
-            uint8_t serial_packet[4] = {SERIAL_DIST_MARKER, (uint8_t)(dev + 1), msb, lsb};
+            // Paket 3-Byte: [ID, MSB, LSB] - TANPA marker 0xBB
+            uint8_t serial_packet[3] = {(uint8_t)(dev + 1), msb, lsb};
             
             // Kirim ke Bus (UART2)
-            HAL_UART_Transmit(&huart2, serial_packet, 4, 10);
+            HAL_UART_Transmit(&huart2, serial_packet, 3, 10);
             packets_distributed++;
             
-            // Delay kecil agar device punya waktu terima data
-            HAL_Delay(2);
+            // Delay dikurangi untuk performa (1ms cukup)
+            HAL_Delay(1);
           }
           
           // Blink LED PC13 (Active Low) - Singkat tanda data masuk

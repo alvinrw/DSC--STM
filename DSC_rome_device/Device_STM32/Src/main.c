@@ -13,6 +13,23 @@
 /* USER CODE BEGIN Includes */
 #include <stdlib.h>  // untuk atoi()
 #include <string.h>  // untuk memset()
+
+// DSC Helper Defines (dari ROME_DSC1)
+#define DSC_MASK_PA   0x1FFF    // PA0–PA12
+#define DSC_BIT13_PB  (1 << 10) // PB10
+#define DSC_BIT14_PB  (1 << 11) // PB11
+#define DSC_BIT15_PA  (1 << 15) // PA15
+
+#define DSC_EN_PORT GPIOC
+#define DSC_EN_PIN  GPIO_PIN_14
+#define RX_BUF_SIZE 16
+#define DSC_ZERO_OFFSET 0xAAAB
+
+// UART Variables
+uint8_t rx_byte;
+uint8_t rx_buffer[RX_BUF_SIZE];
+uint8_t rx_index = 0;
+volatile uint8_t rx_ready = 0;
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -35,6 +52,13 @@ static void MX_USART1_UART_Init(void);
 float syncro_val=0;
 uint16_t digital_val=0;
 uint8_t dsc_mode=1;
+
+// DSC Helper Functions (dari ROME_DSC1)
+void DSC_SetData(uint16_t value);
+void DSC_Update(uint16_t pos);
+uint16_t DSC_ApplyOffset(uint16_t raw_dsc);
+uint16_t DSC_LogicalToRaw(uint16_t logical);
+uint16_t DSC_ReverseLogical(uint16_t logical);
 /* USER CODE END PFP */
 
 /**
@@ -108,81 +132,59 @@ int main(void)
   // Kirim pesan awal via UART
   sprintf(txt, "Device #%d Ready\r\n", DEVICE_ID);
   HAL_UART_Transmit(&huart1, (uint8_t*)txt, strlen(txt), 100);
+  
+  // Start UART interrupt reception (dari ROME_DSC1)
+  HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
+  
+  // Init motor position
+  DSC_Update(DSC_ZERO_OFFSET);
+  HAL_Delay(100);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   
-  // Buffer untuk terima 4 bytes distribusi Serial dari Master
-  uint8_t serial_rx_buffer[SERIAL_PACKET_SIZE];
-  uint8_t serial_rx_index = 0;
-  uint32_t last_rx_time = 0;  // Timestamp untuk timeout
-  
   while (1)
   {
-    // Timeout check - reset buffer jika tidak ada paket lengkap dalam 100ms
-    if(serial_rx_index > 0 && (HAL_GetTick() - last_rx_time) > 100){
-      serial_rx_index = 0;  // Reset buffer
-    }
-    
-    // Terima 1 byte dari Master via UART (Shared Bus)
-    uint8_t rx_byte;
-    if(HAL_UART_Receive(&huart1, &rx_byte, 1, 5) == HAL_OK){
+    // Check if data ready (set by interrupt callback)
+    if(rx_ready){
+      uint16_t raw_data;
       
-      last_rx_time = HAL_GetTick();  // Update timestamp
+      // Parse 3-byte packet: [ID, MSB, LSB]
+      raw_data = ((uint16_t)rx_buffer[1] << 8) | rx_buffer[2];
+      digital_val = raw_data;
       
-      // 1. Cari Start Marker (0xBB)
-      if(serial_rx_index == 0 && rx_byte == SERIAL_DIST_MARKER){
-        serial_rx_buffer[serial_rx_index++] = rx_byte;
+      // Decoding berdasarkan DEVICE_ID
+      if(DEVICE_ID == 5){
+        int16_t signed_val = (int16_t)digital_val;
+        syncro_val = ((float)signed_val / 10.0f) - 179.9f;
       }
-      // 2. Kumpulkan byte berikutnya (dengan proteksi overflow)
-      else if(serial_rx_index > 0 && serial_rx_index < SERIAL_PACKET_SIZE){
-        serial_rx_buffer[serial_rx_index++] = rx_byte;
-        
-        // 3. Jika paket lengkap (4 byte)
-        if(serial_rx_index == SERIAL_PACKET_SIZE){
-          uint8_t target_id = serial_rx_buffer[1];
-          
-          // 4. Filter berdasarkan DEVICE_ID
-          if(target_id == DEVICE_ID){
-            uint8_t byte_high = serial_rx_buffer[2];
-            uint8_t byte_low = serial_rx_buffer[3];
-
-            digital_val = (uint16_t)((byte_high << 8) | byte_low);
-            
-            // Decoding berdasarkan DEVICE_ID
-            if(DEVICE_ID == 5){
-              int16_t signed_val = (int16_t)digital_val;
-              syncro_val = ((float)signed_val / 10.0f) - 179.9f;
-            }
-            else{
-              syncro_val = (float)digital_val / 10.0f;
-            }
-
-            // Update OLED
-            SSD1306_GotoXY(10,15);
-            sprintf(txt, "Digital: %u   ", digital_val);
-            SSD1306_Puts(txt, &Font_7x10, 1);
-
-            SSD1306_GotoXY(10,35);
-            sprintf(txt, "Syncro: %.2f  ", syncro_val);
-            SSD1306_Puts(txt, &Font_7x10, 1);
-
-            SSD1306_UpdateScreen();
-
-            // Update Output GPIO
-            dsc(digital_val);
-
-            // Blink LED (Active LOW: RESET=ON, SET=OFF)
-            HAL_GPIO_WritePin(LED_BLINK_GPIO_Port, LED_BLINK_Pin, GPIO_PIN_RESET); // Nyala
-            HAL_Delay(50);
-            HAL_GPIO_WritePin(LED_BLINK_GPIO_Port, LED_BLINK_Pin, GPIO_PIN_SET);   // Mati
-          }
-          
-          // Reset buffer untuk paket berikutnya
-          serial_rx_index = 0;
-        }
+      else{
+        syncro_val = (float)digital_val / 10.0f;
       }
+
+      // Update OLED
+      SSD1306_GotoXY(10,15);
+      sprintf(txt, "Digital: %u   ", digital_val);
+      SSD1306_Puts(txt, &Font_7x10, 1);
+
+      SSD1306_GotoXY(10,35);
+      sprintf(txt, "Syncro: %.2f  ", syncro_val);
+      SSD1306_Puts(txt, &Font_7x10, 1);
+
+      SSD1306_UpdateScreen();
+
+      // Update Output GPIO - Pakai DSC helper functions
+      uint16_t logical_rev = DSC_ReverseLogical(digital_val);
+      uint16_t raw_to_dsc = DSC_LogicalToRaw(logical_rev);
+      DSC_Update(raw_to_dsc);
+
+      // Toggle LED (non-blocking) - Active LOW
+      HAL_GPIO_TogglePin(LED_BLINK_GPIO_Port, LED_BLINK_Pin);
+      
+      // Reset flags
+      rx_index = 0;
+      rx_ready = 0;
     }
 
     // LED stays ON (no heartbeat blink)
@@ -326,6 +328,87 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+// UART Interrupt Callback (dari ROME_DSC1)
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if (huart->Instance == USART1)
+  {
+    if(!rx_ready){
+      if(rx_index < 3){
+        rx_buffer[rx_index++] = rx_byte;
+        if(rx_index == 3 && rx_buffer[0] == DEVICE_ID){
+          rx_ready = 1;
+        }
+        else if(rx_index == 3 && rx_buffer[0] != DEVICE_ID){
+          rx_index = 0;  // Reset kalau bukan untuk device ini
+        }
+      }
+    }
+    // Re-enable interrupt untuk byte berikutnya
+    HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
+  }
+}
+
+// DSC Helper Functions (dari ROME_DSC1)
+void DSC_SetData(uint16_t value)
+{
+    uint32_t bsrr_a = 0;
+    uint32_t bsrr_b = 0;
+
+    /* ========= PORT A ========= */
+    // PA0–PA12 → Bit 0–12
+    bsrr_a |= ((~value & DSC_MASK_PA) << 16); // reset
+    bsrr_a |=  ( value & DSC_MASK_PA);        // set
+
+    // PA15 → Bit 15
+    if (value & (1 << 15))
+        bsrr_a |= DSC_BIT15_PA;
+    else
+        bsrr_a |= (DSC_BIT15_PA << 16);
+
+    /* ========= PORT B ========= */
+    // PB10 → Bit 13
+    if (value & (1 << 13))
+        bsrr_b |= DSC_BIT13_PB;
+    else
+        bsrr_b |= (DSC_BIT13_PB << 16);
+
+    // PB11 → Bit 14
+    if (value & (1 << 14))
+        bsrr_b |= DSC_BIT14_PB;
+    else
+        bsrr_b |= (DSC_BIT14_PB << 16);
+
+    /* ========= APPLY ========= */
+    GPIOA->BSRR = bsrr_a;
+    GPIOB->BSRR = bsrr_b;
+}
+
+void DSC_Update(uint16_t pos)
+{
+    DSC_SetData(pos);
+
+    // Pulse EN/LATCH
+    HAL_GPIO_WritePin(DSC_EN_PORT, DSC_EN_PIN, GPIO_PIN_RESET);
+    __NOP(); __NOP();
+    HAL_GPIO_WritePin(DSC_EN_PORT, DSC_EN_PIN, GPIO_PIN_SET);
+}
+
+uint16_t DSC_ApplyOffset(uint16_t raw_dsc)
+{
+    return (uint16_t)(raw_dsc - DSC_ZERO_OFFSET);
+}
+
+uint16_t DSC_LogicalToRaw(uint16_t logical)
+{
+    return (uint16_t)(logical + DSC_ZERO_OFFSET) & 0xFFFF;
+}
+
+uint16_t DSC_ReverseLogical(uint16_t logical)
+{
+    return (uint16_t)(0x10000 - logical);
+}
 
 /* USER CODE END 4 */
 
