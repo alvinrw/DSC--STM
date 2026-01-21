@@ -1,0 +1,10 @@
+10:27:35 **** Incremental Build of configuration Debug for project Device_STM32 ****
+make all 
+arm-none-eabi-size  Device_STM32.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37784	    500	   3284	  41568	   a260	Device_STM32.elf
+Finished building: default.size.stdout
+ 
+
+10:27:35 Build Finished. 0 errors, 0 warnings. (took 307ms)
+

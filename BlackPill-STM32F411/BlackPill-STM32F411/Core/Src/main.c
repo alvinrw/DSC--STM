@@ -79,6 +79,9 @@ int main(void)
             // Kirim ke Bus (UART2)
             HAL_UART_Transmit(&huart2, serial_packet, 4, 10);
             packets_distributed++;
+            
+            // Delay kecil agar device punya waktu terima data
+            HAL_Delay(2);
           }
           
           // Blink LED PC13 (Active Low) - Singkat tanda data masuk

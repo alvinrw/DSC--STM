@@ -45,7 +45,7 @@ extern "C" {
 // DEVICE ID CONFIGURATION
 // Change this for each STM32 device (1-5)
 // ============================================
-#define DEVICE_ID 2  // Device 1, 2, 3, 4, or 5
+#define DEVICE_ID 1  // Device 1, 2, 3, 4, or 5
 
 // Protocol header validation
 #define PROTOCOL_HEADER_1  0xA5

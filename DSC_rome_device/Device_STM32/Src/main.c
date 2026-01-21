@@ -116,19 +116,27 @@ int main(void)
   // Buffer untuk terima 4 bytes distribusi Serial dari Master
   uint8_t serial_rx_buffer[SERIAL_PACKET_SIZE];
   uint8_t serial_rx_index = 0;
+  uint32_t last_rx_time = 0;  // Timestamp untuk timeout
   
   while (1)
   {
+    // Timeout check - reset buffer jika tidak ada paket lengkap dalam 100ms
+    if(serial_rx_index > 0 && (HAL_GetTick() - last_rx_time) > 100){
+      serial_rx_index = 0;  // Reset buffer
+    }
+    
     // Terima 1 byte dari Master via UART (Shared Bus)
     uint8_t rx_byte;
     if(HAL_UART_Receive(&huart1, &rx_byte, 1, 5) == HAL_OK){
+      
+      last_rx_time = HAL_GetTick();  // Update timestamp
       
       // 1. Cari Start Marker (0xBB)
       if(serial_rx_index == 0 && rx_byte == SERIAL_DIST_MARKER){
         serial_rx_buffer[serial_rx_index++] = rx_byte;
       }
-      // 2. Kumpulkan byte berikutnya
-      else if(serial_rx_index > 0){
+      // 2. Kumpulkan byte berikutnya (dengan proteksi overflow)
+      else if(serial_rx_index > 0 && serial_rx_index < SERIAL_PACKET_SIZE){
         serial_rx_buffer[serial_rx_index++] = rx_byte;
         
         // 3. Jika paket lengkap (4 byte)
