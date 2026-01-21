@@ -60,8 +60,8 @@ all: main-build
 main-build: BlackPill-STM32F411.elf secondary-outputs
 
 # Tool invocations
-BlackPill-STM32F411.elf BlackPill-STM32F411.map: $(OBJS) $(USER_OBJS) C:\Users\alvin\Documents\Coolyeah\pkl\TUGAS\Synchro_ROME\github\BlackPill-STM32F411\BlackPill-STM32F411\STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "BlackPill-STM32F411.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\alvin\Documents\Coolyeah\pkl\TUGAS\Synchro_ROME\github\BlackPill-STM32F411\BlackPill-STM32F411\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BlackPill-STM32F411.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+BlackPill-STM32F411.elf BlackPill-STM32F411.map: $(OBJS) $(USER_OBJS) C:\Users\alvin\Documents\Coolyeah\pkl\TUGAS\Synchro_ROME\github\DSC--STM\BlackPill-STM32F411\BlackPill-STM32F411\STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "BlackPill-STM32F411.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\alvin\Documents\Coolyeah\pkl\TUGAS\Synchro_ROME\github\DSC--STM\BlackPill-STM32F411\BlackPill-STM32F411\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BlackPill-STM32F411.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

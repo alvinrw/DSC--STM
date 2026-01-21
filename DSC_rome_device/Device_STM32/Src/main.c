@@ -99,6 +99,9 @@ int main(void)
   // Init GPIO output - set all to 0
   dsc(0);
   
+  // EN_SYNC init with pull-up (prevents floating when not driven)
+  HAL_GPIO_WritePin(EN_SYNC_GPIO_Port, EN_SYNC_Pin, GPIO_PIN_RESET);
+  
   // LED OFF by default (Active LOW: SET=OFF)
   HAL_GPIO_WritePin(LED_BLINK_GPIO_Port, LED_BLINK_Pin, GPIO_PIN_SET);
   
@@ -113,19 +116,27 @@ int main(void)
   // Buffer untuk terima 4 bytes distribusi Serial dari Master
   uint8_t serial_rx_buffer[SERIAL_PACKET_SIZE];
   uint8_t serial_rx_index = 0;
+  uint32_t last_rx_time = 0;  // Timestamp untuk timeout
   
   while (1)
   {
+    // Timeout check - reset buffer jika tidak ada paket lengkap dalam 100ms
+    if(serial_rx_index > 0 && (HAL_GetTick() - last_rx_time) > 100){
+      serial_rx_index = 0;  // Reset buffer
+    }
+    
     // Terima 1 byte dari Master via UART (Shared Bus)
     uint8_t rx_byte;
     if(HAL_UART_Receive(&huart1, &rx_byte, 1, 5) == HAL_OK){
+      
+      last_rx_time = HAL_GetTick();  // Update timestamp
       
       // 1. Cari Start Marker (0xBB)
       if(serial_rx_index == 0 && rx_byte == SERIAL_DIST_MARKER){
         serial_rx_buffer[serial_rx_index++] = rx_byte;
       }
-      // 2. Kumpulkan byte berikutnya
-      else if(serial_rx_index > 0){
+      // 2. Kumpulkan byte berikutnya (dengan proteksi overflow)
+      else if(serial_rx_index > 0 && serial_rx_index < SERIAL_PACKET_SIZE){
         serial_rx_buffer[serial_rx_index++] = rx_byte;
         
         // 3. Jika paket lengkap (4 byte)
@@ -289,7 +300,7 @@ static void MX_GPIO_Init(void)
 
   GPIO_InitStruct.Pin = LED_BLINK_Pin|EN_SYNC_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;  // Pull-up untuk EN_SYNC agar tidak floating
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
@@ -298,13 +309,13 @@ static void MX_GPIO_Init(void)
                           |B9_Pin|B10_Pin|B11_Pin|B12_Pin
                           |B13_Pin|B16_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;  // Pull-down agar default = 0 saat floating
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   GPIO_InitStruct.Pin = B14_Pin|B15_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;  // Pull-down agar default = 0 saat floating
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 

@@ -2,9 +2,9 @@ import serial
 import time
 
 # Konfigurasi
-PORT = 'COM17'  # Sesuaikan dengan port kamu
+PORT = 'COM11'  # Sesuaikan dengan port kamu
 BAUD = 115200
-DEVICE_ID = 3  # Device yang akan ditest (1-5)
+DEVICE_ID = 1  # Device yang akan ditest (1-5) - MATCH dengan firmware!
 STEP_DEGREE = 15  # Increment derajat (bisa diganti: 5, 10, 15, 30, 45, dll)
 DELAY_BETWEEN = 2  # Delay antar broadcast (detik)
 
@@ -20,35 +20,34 @@ def degree_to_hex(degree):
     return f"0x{byte_high:02X}", f"0x{byte_low:02X}"
 
 def create_broadcast(device_id, degree):
-    """Create 15-byte broadcast packet"""
+    """Create 15-byte broadcast packet (BINARY)"""
     # Header
-    header = ["0xA5", "0x99"]
+    packet = [0xA5, 0x99]
     
     # Reserved
-    reserved = ["0x00", "0x00", "0x00"]
+    packet.extend([0x00, 0x00, 0x00])
     
     # Device data (5 devices, 2 bytes each)
-    device_data = []
     for dev in range(1, 6):
         if dev == device_id:
             # Target device gets the degree value
-            hex_high, hex_low = degree_to_hex(degree)
-            device_data.extend([hex_high, hex_low])
+            # Firmware expects: degree * 10 (e.g., 90° → 900)
+            digital = int(degree * 10)
+            byte_high = (digital >> 8) & 0xFF
+            byte_low = digital & 0xFF
+            packet.extend([byte_high, byte_low])
         else:
             # Other devices get 0
-            device_data.extend(["0x00", "0x00"])
+            packet.extend([0x00, 0x00])
     
-    # Combine all
-    full_packet = header + reserved + device_data
-    return full_packet
+    return bytes(packet)
 
 def send_broadcast(ser, packet, degree):
     """Send broadcast and display info"""
-    data = " ".join(packet) + "\n"
-    ser.write(data.encode())
+    ser.write(packet)  # Send binary bytes
     
     print(f"✓ Sent: {degree:3d}° → Device #{DEVICE_ID}")
-    print(f"  Packet: {data.strip()}")
+    print(f"  Packet: {' '.join(f'{b:02X}' for b in packet)}")
     
     # Wait for response (optional)
     time.sleep(0.1)

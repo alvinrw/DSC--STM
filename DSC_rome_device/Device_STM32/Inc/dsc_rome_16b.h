@@ -13,6 +13,6 @@
 #define digital_to_degree(x)	((float)x)  // Digital (0-360) sama dengan derajat
 
 float syncro_value(float data);
-void dsc(uint16_t digital);  // Changed from float degree to uint16_t digital
+void dsc(float degree);  // Changed to float degree (Code_asli_Ori formula)
 float mirror_value(float data);
 #endif /* DSC_ROME_16B_H_ */

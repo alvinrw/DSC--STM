@@ -1,7 +1,15 @@
-13:49:59 **** Incremental Build of configuration Debug for project Device_STM32 ****
+16:14:48 **** Incremental Build of configuration Debug for project Device_STM32 ****
 make all 
 arm-none-eabi-gcc "../Src/dsc_rome_16b.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/dsc_rome_16b.d" -MT"Src/dsc_rome_16b.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/dsc_rome_16b.o"
 arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:142:48: warning: ' deg)
+   ' directive writing 7 bytes into a region of size 3 [-Wformat-overflow=]
+  142 |   sprintf(txt, "Device #%d Ready (Init: %.2f deg)\r\n", DEVICE_ID, STARTUP_INIT_ANGLE);
+      |                                             ~~~^~~~~~
+../Src/main.c:142:3: note: 'sprintf' output 35 bytes into a destination of size 30
+  142 |   sprintf(txt, "Device #%d Ready (Init: %.2f deg)\r\n", DEVICE_ID, STARTUP_INIT_ANGLE);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 arm-none-eabi-gcc "../Src/stm32f1xx_hal_msp.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/stm32f1xx_hal_msp.d" -MT"Src/stm32f1xx_hal_msp.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/stm32f1xx_hal_msp.o"
 arm-none-eabi-gcc "../Src/stm32f1xx_it.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Og -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/stm32f1xx_it.d" -MT"Src/stm32f1xx_it.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/stm32f1xx_it.o"
 arm-none-eabi-gcc -o "Device_STM32.elf" @"objects.list"   -mcpu=cortex-m3 -T"../STM32F103C8Tx_FLASH.ld" --specs=nosys.specs -Wl,-Map="Device_STM32.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
@@ -10,7 +18,7 @@ Finished building target: Device_STM32.elf
  
 arm-none-eabi-size  Device_STM32.elf 
    text	   data	    bss	    dec	    hex	filename
-  37632	    500	   3284	  41416	   a1c8	Device_STM32.elf
+  37904	    500	   3284	  41688	   a2d8	Device_STM32.elf
 Finished building: default.size.stdout
  
 arm-none-eabi-objdump -h -S Device_STM32.elf  > "Device_STM32.list"
@@ -20,5 +28,5 @@ arm-none-eabi-objcopy  -O ihex Device_STM32.elf  "Device_STM32.hex"
 Finished building: Device_STM32.hex
  
 
-13:50:02 Build Finished. 0 errors, 1 warnings. (took 2s.883ms)
+16:14:51 Build Finished. 0 errors, 2 warnings. (took 3s.253ms)
 

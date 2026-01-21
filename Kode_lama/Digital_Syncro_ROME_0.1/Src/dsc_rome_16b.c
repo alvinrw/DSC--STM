@@ -1,8 +1,9 @@
 #include "main.h"
 
 void dsc(uint16_t digital){
-  // No conversion needed - use digital value directly
-  // No delay needed - GPIO write is fast (microseconds)
+  // Add delay for DSC converter to latch data (needed for motor synchro!)
+  HAL_Delay(10);
+  
   //bit 0
   if(digital&0x0001){
     HAL_GPIO_WritePin(B1_GPIO_Port, B1_Pin, SET);
@@ -98,7 +99,9 @@ void dsc(uint16_t digital){
     HAL_GPIO_WritePin(B16_GPIO_Port, B16_Pin, SET);
   }
   else HAL_GPIO_WritePin(B16_GPIO_Port, B16_Pin, RESET);
-  // No delay needed - GPIO is already stable
+  
+  // Add delay after GPIO write for stability (needed for motor synchro!)
+  HAL_Delay(10);
 }
 
 float syncro_value(float data){

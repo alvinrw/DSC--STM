@@ -7,6 +7,7 @@
 		<item key="WizardProjectsImportPage.STORE_CLOSE_CREATED_PROJECTS_ID" value="false"/>
 		<item key="WizardProjectsImportPage.STORE_HIDE_CONFLICTING_PROJECTS_ID" value="false"/>
 		<list key="WizardProjectsImportPage.STORE_DIRECTORIES">
+			<item value="C:\Users\alvin\Documents\Coolyeah\pkl\TUGAS\Synchro_ROME\github\DSC--STM\Kode_lama\Digital_Syncro_ROME_0.1"/>
 			<item value="C:\Users\alvin\Documents\Coolyeah\pkl\TUGAS\Synchro_ROME\github\DSC -- STM Device\Device_STM32"/>
 		</list>
 		<list key="WizardProjectsImportPage.STORE_ARCHIVES">

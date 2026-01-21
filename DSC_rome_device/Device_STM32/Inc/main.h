@@ -45,7 +45,7 @@ extern "C" {
 // DEVICE ID CONFIGURATION
 // Change this for each STM32 device (1-5)
 // ============================================
-#define DEVICE_ID 5  // Device 1, 2, 3, 4, or 5
+#define DEVICE_ID 2  // Device 1, 2, 3, 4, or 5
 
 // Protocol definitions
 #define SERIAL_DIST_MARKER  0xBB
